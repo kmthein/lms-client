@@ -34,6 +34,15 @@
     rgba(0, 212, 255, 1) 98%
   );
 }
-.slick-slide {
-  width: 180px !important;
+.slide-1 {
+  background-image: url(./assets/main_bg1.jpg);
+  background-size: cover;
+}
+.slide-2 {
+  background-image: url(./assets/main_bg2.jpg);
+  background-size: cover;
+}
+.slide-3 {
+  background-image: url(./assets/main_bg3.jpg);
+  background-size: cover;
 }

@@ -3,6 +3,7 @@ import "./App.css";
 import { Button, DatePicker, Input, Space } from "antd";
 import Main from "./layouts/Main";
 import Home from "./pages/admin/Home";
+import UserHome from "./pages/user/Home";
 import Books from "./pages/admin/Books";
 import Admin from "./layouts/Admin";
 import Genre from "./pages/admin/Genre";
@@ -131,7 +132,12 @@ function App() {
     {
       path: "/",
       element: <Main />,
-      children: [],
+      children: [
+        {
+          index: true,
+          element: <UserHome />
+        }
+      ],
     },
     {
       path: "/admin",
@@ -171,7 +177,17 @@ function App() {
         },
         {
           path: "author",
-          element: <Author />,
+          element: (
+            <Author
+              searchText={searchText}
+              setSearchText={setSearchText}
+              searchedColumn={searchedColumn}
+              setSearchedColumn={setSearchedColumn}
+              handleSearch={handleSearch}
+              handleReset={handleReset}
+              getColumnSearchProps={getColumnSearchProps}
+            />
+          ),
         },
       ],
     },
