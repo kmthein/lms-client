@@ -4,6 +4,7 @@ import { Button, DatePicker, Input, Space } from "antd";
 import Main from "./layouts/Main";
 import Home from "./pages/admin/Home";
 import UserHome from "./pages/user/Home";
+import UserBook from "./pages/user/Book";
 import Books from "./pages/admin/Books";
 import Admin from "./layouts/Admin";
 import Genre from "./pages/admin/Genre";
@@ -135,8 +136,12 @@ function App() {
       children: [
         {
           index: true,
-          element: <UserHome />
-        }
+          element: <UserHome />,
+        },
+        {
+          path: "/books",
+          element: <UserBook />,
+        },
       ],
     },
     {

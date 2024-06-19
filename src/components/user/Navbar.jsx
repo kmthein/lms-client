@@ -18,22 +18,30 @@ const Navbar = () => {
         <Search
           placeholder="input search text"
           onSearch={onSearch}
-          style={{ width: 400 }}
+          style={{ width: 400, borderRadius: "10px" }}
         />
         <div className="flex gap-20 items-center uppercase font-medium">
-            <ul className="flex gap-8">
-                <Link to="/"><li>Home</li></Link>
-                <Link to="/"><li>Books</li></Link>
-                <Link to="/"><li>My Library</li></Link>
-            </ul>
-            <ul className="flex gap-5">
-                <li className="flex items-center gap-1"><BsPerson className="text-xl" />
-                {/* <span>Account</span> */}
-                </li>
-                <li className="flex items-center gap-1"><BiCart className="text-xl" />
-                {/* <span>Cart</span> */}
-                </li>
-            </ul>
+          <ul className="flex gap-8">
+            <Link to="/">
+              <li>Home</li>
+            </Link>
+            <Link to="/books">
+              <li>Books</li>
+            </Link>
+            <Link to="/">
+              <li>My Library</li>
+            </Link>
+          </ul>
+          <ul className="flex gap-5">
+            <li className="flex items-center gap-1">
+              <BsPerson className="text-xl" />
+              {/* <span>Account</span> */}
+            </li>
+            <li className="flex items-center gap-1">
+              <BiCart className="text-xl" />
+              {/* <span>Cart</span> */}
+            </li>
+          </ul>
         </div>
       </div>
     </div>
