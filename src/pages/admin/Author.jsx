@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { IoMdAdd } from "react-icons/io";
 import { Link } from "react-router-dom";
 import BookForm from "../../components/admin/book/BookForm";
+import AuthorForm from "../../components/admin/author/AuthorForm";
 
 const data = [
   {
@@ -89,7 +90,7 @@ const Author = ({
         >
           Add New
         </Button>
-        <BookForm open={open} setOpen={setOpen} />
+        <AuthorForm open={open} setOpen={setOpen} />
       </div>
       <Table columns={columns} dataSource={data} />
     </div>
