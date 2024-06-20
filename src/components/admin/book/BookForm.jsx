@@ -2,7 +2,7 @@ import { Form, Input, Modal, Radio, Upload } from "antd";
 import React, { useState } from "react";
 import { BiPlus } from "react-icons/bi";
 
-const getBase64 = (file) =>
+export const getBase64 = (file) =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
