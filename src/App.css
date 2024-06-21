@@ -49,3 +49,8 @@
 #upload {
   display: none !important;
 }
+.submit:hover {
+  background: rgb(251 191 36) !important;
+  color: black !important;
+  border: 0;
+}
