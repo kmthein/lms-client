@@ -1,12 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import { Input, Space } from "antd";
 import { BsPerson } from "react-icons/bs";
-import { BiCart } from "react-icons/bi";
+import { CiBookmark } from "react-icons/ci";
 import { Link } from "react-router-dom";
+import RegisterForm from "./Register/RegisterForm";
 
 const Navbar = () => {
   const { Search } = Input;
+  const [open, setOpen] = useState(false);
 
+  const showModal = () => {
+    setOpen(true);
+  };
   const onSearch = (value, _e, info) => console.log(info?.source, value);
 
   return (
@@ -34,15 +39,19 @@ const Navbar = () => {
           </ul>
           <ul className="flex gap-5">
             <li className="flex items-center gap-1">
-              <BsPerson className="text-xl" />
+              <BsPerson
+                className="text-xl cursor-pointer"
+                onClick={showModal}
+              />
               {/* <span>Account</span> */}
             </li>
             <li className="flex items-center gap-1">
-              <BiCart className="text-xl" />
+              <CiBookmark className="text-xl cursor-pointer" />
               {/* <span>Cart</span> */}
             </li>
           </ul>
         </div>
+        <RegisterForm open={open} setOpen={setOpen} />
       </div>
     </div>
   );
