@@ -1,37 +1,9 @@
 import { Button, Table } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoMdAdd } from "react-icons/io";
 import { Link } from "react-router-dom";
-import BookForm from "../../components/admin/book/BookForm";
 import GenreForm from "../../components/admin/genre/GenreForm";
-
-const data = [
-  {
-    key: "1",
-    name: "Fantasy",
-    total_books: "120",
-  },
-  {
-    key: "2",
-    name: "Mystery/Thriller",
-    total_books: "54",
-  },
-  {
-    key: "3",
-    name: "Horror",
-    total_books: "80",
-  },
-  {
-    key: "4",
-    name: "Romance",
-    total_books: "43",
-  },
-  {
-    key: "5",
-    name: "Sci-fi",
-    total_books: "150",
-  },
-];
+import { getGenreandBookCount } from "../../api/genre";
 
 const Genre = ({
   searchText,
@@ -42,20 +14,21 @@ const Genre = ({
   handleReset,
   getColumnSearchProps,
 }) => {
+  const [data, setData] = useState([]);
   const columns = [
     {
-      title: "Name",
-      dataIndex: "name",
-      key: "name",
+      title: "Genre",
+      dataIndex: "genre",
+      key: "genre",
       width: "30%",
-      ...getColumnSearchProps("name"),
+      ...getColumnSearchProps("genre"),
     },
     {
       title: "Total Books",
-      dataIndex: "total_books",
-      key: "total_books",
-      ...getColumnSearchProps("total_books"),
-      sorter: (a, b) => a.total_books.length - b.total_books.length,
+      dataIndex: "bookCount",
+      key: "bookCount",
+      ...getColumnSearchProps("bookCount"),
+      sorter: (a, b) => a.bookCount - b.bookCount,
       sortDirections: ["descend", "ascend"],
     },
     {
@@ -78,7 +51,9 @@ const Genre = ({
   const showModal = () => {
     setOpen(true);
   };
-
+  useEffect(() => {
+    getGenreandBookCount().then((res) => setData(res));
+  }, []);
   return (
     <div>
       <div className="flex justify-end mb-4">
@@ -92,7 +67,7 @@ const Genre = ({
         </Button>
         <GenreForm open={open} setOpen={setOpen} />
       </div>
-      <Table columns={columns} dataSource={data} />
+      <Table columns={columns} dataSource={data} rowKey={"genre"} />
     </div>
   );
 };

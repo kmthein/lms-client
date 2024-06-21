@@ -8,3 +8,12 @@ export const addGenre = async (payload) => {
     return error.response.data;
   }
 };
+
+export const getGenreandBookCount = async () => {
+  try {
+    const response = await api.get("/api/genre/genreandbookcount");
+    return response.data;
+  } catch (error) {
+    return error.response.data;
+  }
+};
