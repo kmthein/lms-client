@@ -9,6 +9,15 @@ export const addGenre = async (payload) => {
   }
 };
 
+export const getAllGenres = async () => {
+  try {
+    const response = await api.get("/api/genre/all");
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
 export const getGenreandBookCount = async () => {
   try {
     const response = await api.get("/api/genre/genreandbookcount");

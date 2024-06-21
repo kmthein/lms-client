@@ -51,8 +51,12 @@ const Genre = ({
   const showModal = () => {
     setOpen(true);
   };
-  useEffect(() => {
+
+  const getAllGenresHandler = () => {
     getGenreandBookCount().then((res) => setData(res));
+  };
+  useEffect(() => {
+    getAllGenresHandler();
   }, []);
   return (
     <div>
@@ -65,7 +69,11 @@ const Genre = ({
         >
           Add New
         </Button>
-        <GenreForm open={open} setOpen={setOpen} />
+        <GenreForm
+          open={open}
+          setOpen={setOpen}
+          getAllGenresHandler={getAllGenresHandler}
+        />
       </div>
       <Table columns={columns} dataSource={data} rowKey={"genre"} />
     </div>

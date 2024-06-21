@@ -1,9 +1,7 @@
-import { Form, Input, Modal, Radio, Upload } from "antd";
+import { Form, Input, Modal } from "antd";
 import React, { useState } from "react";
-import { BiPlus } from "react-icons/bi";
-import { addAuthor, getAllAuthors } from "../../../api/author";
+import { addAuthor } from "../../../api/author";
 import { FaPlus, FaTrashAlt } from "react-icons/fa";
-import { api } from "../../../config/axios";
 
 const AuthorForm = ({ open, setOpen, getAllAuthorsHandler }) => {
   const [form] = Form.useForm();
@@ -13,25 +11,6 @@ const AuthorForm = ({ open, setOpen, getAllAuthorsHandler }) => {
   const handleCancel = () => {
     setOpen(false);
   };
-
-  const uploadButton = (
-    <button
-      style={{
-        border: 0,
-        background: "none",
-      }}
-      type="button"
-    >
-      <BiPlus className=" mx-auto text-xl" />
-      <div
-        style={{
-          marginTop: 8,
-        }}
-      >
-        Upload
-      </div>
-    </button>
-  );
 
   const [previewImg, setPreviewImg] = useState([]);
   const [images, setImages] = useState([]);
@@ -68,7 +47,6 @@ const AuthorForm = ({ open, setOpen, getAllAuthorsHandler }) => {
   const authorSubmitHandler = async (values) => {
     setConfirmLoading(true);
     const formData = new FormData();
-    console.log(images);
     formData.append("name", values.name);
     if (images && images.length > 0) {
       images.forEach((file) => {
@@ -78,7 +56,6 @@ const AuthorForm = ({ open, setOpen, getAllAuthorsHandler }) => {
       formData.append("files", new Blob([]));
     }
     const data = await addAuthor(formData);
-    console.log(data);
     if (data.status == 200) {
       getAllAuthorsHandler();
       setOpen(false);

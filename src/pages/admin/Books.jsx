@@ -1,72 +1,10 @@
 import { IoMdAdd } from "react-icons/io";
-import { Button, Input, Modal, Space, Table } from "antd";
-import { useRef, useState } from "react";
-import { BiSearch } from "react-icons/bi";
-import Highlighter from "react-highlight-words";
+import { Button, Table } from "antd";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import BookForm from "../../components/admin/book/BookForm";
-
-const data = [
-  {
-    key: "1",
-
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2KuFBHfsxQZK3XSsXtiRqaXOWcRn2MId1Tw&s",
-
-    title: "Book One",
-
-    year: "2020",
-
-    fees: "10",
-
-    stock: "20",
-  },
-
-  {
-    key: "2",
-
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2KuFBHfsxQZK3XSsXtiRqaXOWcRn2MId1Tw&s",
-
-    title: "Book Two",
-
-    year: "2019",
-
-    fees: "12",
-
-    stock: "15",
-  },
-
-  {
-    key: "3",
-
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2KuFBHfsxQZK3XSsXtiRqaXOWcRn2MId1Tw&s",
-
-    title: "Book Three",
-
-    year: "2021",
-
-    fees: "8",
-
-    stock: "30",
-  },
-
-  {
-    key: "4",
-
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2KuFBHfsxQZK3XSsXtiRqaXOWcRn2MId1Tw&s",
-
-    title: "Book Four",
-
-    year: "2022",
-
-    fees: "15",
-
-    stock: "10",
-  },
-];
+import { getAllBooks } from "../../api/book";
+import noImage from "../../assets/no_img.jpg";
 
 const Books = ({
   searchText,
@@ -77,6 +15,43 @@ const Books = ({
   handleReset,
   getColumnSearchProps,
 }) => {
+  const [data, setData] = useState([]);
+  const [editForm, setEditForm] = useState(false);
+  const [selectedBookId, setSelectedBookId] = useState(null);
+
+  const getAllBooksHandler = async () => {
+    const response = await getAllBooks();
+    if (response.status == 200) {
+      const modifiedData = response.data.map((d) => {
+        if (d.bookImg != "") {
+          return {
+            ...d,
+            key: d.id,
+            title: d.title,
+            publishYear: d.publishYear,
+            stock: d.stock,
+            image: import.meta.env.VITE_API + "/" + d.bookImg,
+          };
+        } else if (d.bookImg == "") {
+          return {
+            ...d,
+            key: d.id,
+            title: d.title,
+            publishYear: d.publishYear,
+            stock: d.stock,
+            image: noImage,
+          };
+        }
+        return d;
+      });
+      setData(modifiedData);
+    }
+  };
+
+  useEffect(() => {
+    getAllBooksHandler();
+  }, []);
+
   const columns = [
     {
       title: "Image",
@@ -96,17 +71,11 @@ const Books = ({
     },
     {
       title: "Published Year",
-      dataIndex: "year",
-      key: "year",
+      dataIndex: "publishYear",
+      key: "publishYear",
       width: "20%",
-      ...getColumnSearchProps("year"),
-    },
-    {
-      title: "Rent Fees",
-      dataIndex: "fees",
-      key: "fees",
-      ...getColumnSearchProps("fees"),
-      sorter: (a, b) => a.fees.length - b.fees.length,
+      ...getColumnSearchProps("publishYear"),
+      sorter: (a, b) => a.publishYear - b.publishYear,
       sortDirections: ["descend", "ascend"],
     },
     {
@@ -114,16 +83,25 @@ const Books = ({
       dataIndex: "stock",
       key: "stock",
       ...getColumnSearchProps("stock"),
-      sorter: (a, b) => a.stock.length - b.stock.length,
+      sorter: (a, b) => a.stock - b.stock,
       sortDirections: ["descend", "ascend"],
     },
     {
       title: "Action",
       dataIndex: "",
       key: "x",
-      render: () => (
+      render: (text, record) => (
         <div className="flex gap-4">
-          <Link to={""}>Edit</Link>
+          <span
+            className=" cursor-pointer"
+            onClick={() => {
+              setSelectedBookId(record.key);
+              setOpen(true);
+              setEditForm(true);
+            }}
+          >
+            Edit
+          </span>
           <Link to={""} className=" text-red-600">
             Delete
           </Link>
@@ -145,13 +123,23 @@ const Books = ({
           type="primary"
           icon={<IoMdAdd />}
           iconPosition={"end"}
-          onClick={showModal}
+          onClick={() => {
+            showModal();
+            setEditForm(false);
+          }}
         >
           Add New
         </Button>
-        <BookForm open={open} setOpen={setOpen} />
+        <BookForm
+          open={open}
+          setOpen={setOpen}
+          getAllBooksHandler={getAllBooksHandler}
+          selectedBookId={selectedBookId}
+          editForm={editForm}
+          setEditForm={setEditForm}
+        />
       </div>
-      <Table columns={columns} dataSource={data} />
+      <Table columns={columns} dataSource={data} rowKey="key" />
     </div>
   );
 };

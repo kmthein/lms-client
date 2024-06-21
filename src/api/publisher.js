@@ -8,6 +8,15 @@ export const addPublisher = async (payload) => {
   }
 };
 
+export const getAllPublisher = async () => {
+  try {
+    const response = await api.get("/api/publisher/all");
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
 export const getPublisherandBook = async () => {
   try {
     const response = await api.get("/api/publisher/publishersandbooks");

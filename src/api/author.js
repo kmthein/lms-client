@@ -15,6 +15,15 @@ export const addAuthor = async (payload) => {
 
 export const getAllAuthors = async () => {
   try {
+    const response = await api.get("/api/author/all");
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+export const getAllAuthorsBookCount = async () => {
+  try {
     const response = await api.get("/api/author/authors-book");
     return response;
   } catch (error) {

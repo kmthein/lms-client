@@ -2,7 +2,7 @@ import { Form, Input, Modal } from "antd";
 import React, { useState } from "react";
 import { addGenre } from "../../../api/genre";
 
-const GenreForm = ({ open, setOpen }) => {
+const GenreForm = ({ open, setOpen, getAllGenresHandler }) => {
   const [form] = Form.useForm();
   const [confirmLoading, setConfirmLoading] = useState(false);
 
@@ -16,6 +16,7 @@ const GenreForm = ({ open, setOpen }) => {
       console.error("Failed to add genre:", error);
     } finally {
       setConfirmLoading(false);
+      getAllGenresHandler();
     }
   };
 

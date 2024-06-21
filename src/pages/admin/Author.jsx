@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { IoMdAdd } from "react-icons/io";
 import { Link } from "react-router-dom";
 import AuthorForm from "../../components/admin/author/AuthorForm";
-import { getAllAuthors } from "../../api/author";
+import { getAllAuthorsBookCount } from "../../api/author";
 import noImage from "../../assets/no_img.jpg";
 
 const Author = ({
@@ -19,12 +19,9 @@ const Author = ({
 
   const getAllAuthorsHandler = async () => {
     try {
-      const response = await getAllAuthors();
-      console.log(response);
-
+      const response = await getAllAuthorsBookCount();
       const modifiedData = response.data.map((d) => {
         if (d.image != null) {
-          console.log("not null");
           return { ...d, image: import.meta.env.VITE_API + "/" + d.image };
         } else if (d.image == null) {
           return { ...d, image: noImage };
@@ -37,8 +34,6 @@ const Author = ({
       console.log(error);
     }
   };
-
-  console.log(data);
 
   useEffect(() => {
     getAllAuthorsHandler();
