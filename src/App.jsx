@@ -12,6 +12,7 @@ import Author from "./pages/admin/Author";
 import { useRef, useState } from "react";
 import { BiSearch } from "react-icons/bi";
 import Highlighter from "react-highlight-words";
+import Publisher from "./pages/admin/Publisher";
 
 function App() {
   const [searchText, setSearchText] = useState("");
@@ -184,6 +185,20 @@ function App() {
           path: "author",
           element: (
             <Author
+              searchText={searchText}
+              setSearchText={setSearchText}
+              searchedColumn={searchedColumn}
+              setSearchedColumn={setSearchedColumn}
+              handleSearch={handleSearch}
+              handleReset={handleReset}
+              getColumnSearchProps={getColumnSearchProps}
+            />
+          ),
+        },
+        {
+          path: "publisher",
+          element: (
+            <Publisher
               searchText={searchText}
               setSearchText={setSearchText}
               searchedColumn={searchedColumn}

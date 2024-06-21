@@ -52,6 +52,15 @@ const Sidebar = () => {
           className={({ isActive }) =>
             isActive ? "text-[#1a1a1a] font-medium" : "text-[#5f5f5f]"
           }
+          to="publisher"
+        >
+          <BsPerson />
+          <span className="ml-3">Publisher</span>
+        </NavLink>
+        <NavLink
+          className={({ isActive }) =>
+            isActive ? "text-[#1a1a1a] font-medium" : "text-[#5f5f5f]"
+          }
           to="mylibrary"
         >
           <BiLibrary />

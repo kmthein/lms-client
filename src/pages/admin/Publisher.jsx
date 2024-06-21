@@ -1,39 +1,11 @@
 import { Button, Table } from "antd";
-import React, { useState } from "react";
 import { IoMdAdd } from "react-icons/io";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import BookForm from "../../components/admin/book/BookForm";
-import GenreForm from "../../components/admin/genre/GenreForm";
+import PublisherForm from "../../components/admin/publisher/PublisherForm";
+import { getPublisherandBook } from "../../api/publisher";
 
-const data = [
-  {
-    key: "1",
-    name: "Fantasy",
-    total_books: "120",
-  },
-  {
-    key: "2",
-    name: "Mystery/Thriller",
-    total_books: "54",
-  },
-  {
-    key: "3",
-    name: "Horror",
-    total_books: "80",
-  },
-  {
-    key: "4",
-    name: "Romance",
-    total_books: "43",
-  },
-  {
-    key: "5",
-    name: "Sci-fi",
-    total_books: "150",
-  },
-];
-
-const Genre = ({
+const Publisher = ({
   searchText,
   setSearchText,
   searchedColumn,
@@ -42,20 +14,22 @@ const Genre = ({
   handleReset,
   getColumnSearchProps,
 }) => {
+  const [data, setData] = useState([]);
+  console.log(data);
   const columns = [
     {
       title: "Name",
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "publisherName",
+      key: "publisherName",
       width: "30%",
-      ...getColumnSearchProps("name"),
+      ...getColumnSearchProps("publisherName"),
     },
     {
       title: "Total Books",
-      dataIndex: "total_books",
-      key: "total_books",
-      ...getColumnSearchProps("total_books"),
-      sorter: (a, b) => a.total_books.length - b.total_books.length,
+      dataIndex: "bookCount",
+      key: "bookCount",
+      ...getColumnSearchProps("bookCount"),
+      sorter: (a, b) => a.bookCount - b.bookCount,
       sortDirections: ["descend", "ascend"],
     },
     {
@@ -72,13 +46,14 @@ const Genre = ({
       ),
     },
   ];
-
   const [open, setOpen] = useState(false);
 
   const showModal = () => {
     setOpen(true);
   };
-
+  useEffect(() => {
+    getPublisherandBook().then((res) => setData(res));
+  }, []);
   return (
     <div>
       <div className="flex justify-end mb-4">
@@ -90,11 +65,11 @@ const Genre = ({
         >
           Add New
         </Button>
-        <GenreForm open={open} setOpen={setOpen} />
+        <PublisherForm open={open} setOpen={setOpen} />
       </div>
-      <Table columns={columns} dataSource={data} />
+      <Table columns={columns} dataSource={data} rowKey={"publisherName"} />
     </div>
   );
 };
 
-export default Genre;
+export default Publisher;

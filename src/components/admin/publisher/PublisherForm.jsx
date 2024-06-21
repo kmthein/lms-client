@@ -1,15 +1,15 @@
 import { Form, Input, Modal } from "antd";
 import React, { useState } from "react";
-import { addGenre } from "../../../api/genre";
+import { addPublisher } from "../../../api/publisher";
 
-const GenreForm = ({ open, setOpen }) => {
+const PublisherForm = ({ open, setOpen }) => {
   const [form] = Form.useForm();
   const [confirmLoading, setConfirmLoading] = useState(false);
 
   const onCreate = async (values) => {
     setConfirmLoading(true);
     try {
-      await addGenre(values);
+      await addPublisher(values);
       setOpen(false);
       form.resetFields();
     } catch (error) {
@@ -40,14 +40,14 @@ const GenreForm = ({ open, setOpen }) => {
         }}
         onFinish={onCreate}
       >
-        <h1 className="text-xl mb-3 font-medium">Add Genre Name</h1>
+        <h1 className="text-xl mb-3 font-medium">Add Publisher Name</h1>
         <Form.Item
-          name="genreName"
-          label="Genre Name"
+          name="publisherName"
+          label="Publisher Name"
           rules={[
             {
               required: true,
-              message: "Please input Genre Name!",
+              message: "Please input Publisher Name!",
             },
           ]}
         >
@@ -58,4 +58,4 @@ const GenreForm = ({ open, setOpen }) => {
   );
 };
 
-export default GenreForm;
+export default PublisherForm;
