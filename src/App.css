@@ -46,3 +46,6 @@
   background-image: url(./assets/main_bg3.jpg);
   background-size: cover;
 }
+#upload {
+  display: none !important;
+}
