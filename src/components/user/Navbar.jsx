@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Input, Space } from "antd";
 import { BsPerson } from "react-icons/bs";
-import { BiCart } from "react-icons/bi";
+import { CiBookmark } from "react-icons/ci";
 import { Link } from "react-router-dom";
 import RegisterForm from "./Register/RegisterForm";
 
@@ -39,11 +39,14 @@ const Navbar = () => {
           </ul>
           <ul className="flex gap-5">
             <li className="flex items-center gap-1">
-              <BsPerson className="text-xl" onClick={showModal} />
+              <BsPerson
+                className="text-xl cursor-pointer"
+                onClick={showModal}
+              />
               {/* <span>Account</span> */}
             </li>
             <li className="flex items-center gap-1">
-              <BiCart className="text-xl" />
+              <CiBookmark className="text-xl cursor-pointer" />
               {/* <span>Cart</span> */}
             </li>
           </ul>
