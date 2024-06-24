@@ -4,13 +4,18 @@ import { BsPerson } from "react-icons/bs";
 import { CiBookmark } from "react-icons/ci";
 import { Link } from "react-router-dom";
 import RegisterForm from "./Register/RegisterForm";
+import Cart from "../../features/cart/Cart";
 
 const Navbar = () => {
   const { Search } = Input;
   const [open, setOpen] = useState(false);
+  const [isDrawer, setIsDrawer] = useState(false);
 
   const showModal = () => {
     setOpen(true);
+  };
+  const handleDrawer = () => {
+    setIsDrawer(!isDrawer);
   };
   const onSearch = (value, _e, info) => console.log(info?.source, value);
 
@@ -46,12 +51,16 @@ const Navbar = () => {
               {/* <span>Account</span> */}
             </li>
             <li className="flex items-center gap-1">
-              <CiBookmark className="text-xl cursor-pointer" />
+              <CiBookmark
+                className="text-xl cursor-pointer"
+                onClick={handleDrawer}
+              />
               {/* <span>Cart</span> */}
             </li>
           </ul>
         </div>
         <RegisterForm open={open} setOpen={setOpen} />
+        <Cart onClose={handleDrawer} open={isDrawer} />
       </div>
     </div>
   );

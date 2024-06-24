@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { getAllBooks } from "../../api/book";
 import { getAllGenres } from "../../api/genre";
-import { Card, Pagination, Radio, Select, Space } from "antd";
-import { CiHeart } from "react-icons/ci";
-
-const { Meta } = Card;
+import { Pagination, Radio, Select, Space } from "antd";
+import Bookcard from "../../components/user/book/Bookcard";
 const { Option } = Select;
 
 const Book = () => {
@@ -96,44 +94,7 @@ const Book = () => {
         <h1 className="font-medium text-xl mb-4">All Books</h1>
         <div className="flex flex-wrap gap-6">
           {currentBooks.map((book) => (
-            <Card
-              key={book.id}
-              hoverable
-              cover={
-                <img
-                  alt="book cover"
-                  src={
-                    book.bookImg
-                      ? "http://localhost:8080/" + book.bookImg
-                      : "https://dummyimage.com/200x300/cccccc/ffffff.png&text=No+Image"
-                  }
-                  className="h-[280px] w-full object-cover rounded-t-md"
-                />
-              }
-              className="w-[200px] shadow-md rounded-md"
-            >
-              <Meta
-                title={
-                  <div className="flex justify-between items-center">
-                    <h4 className="text-[14px]">{book.title}</h4>
-                    <CiHeart />
-                  </div>
-                }
-                description={
-                  <div className="text-[12px]">
-                    <p className="mb-1">
-                      {book.author.name ? book.author.name : "Unknown"},{" "}
-                      {book.publishYear ? book.publishYear : "Unknown"}
-                    </p>
-                    <p className="text-[12px]">
-                      {book.genres.length > 0
-                        ? book.genres.map((genre) => genre.genreName).join(", ")
-                        : "Unknown Genre"}
-                    </p>
-                  </div>
-                }
-              />
-            </Card>
+            <Bookcard book={book} key={book.id} />
           ))}
         </div>
         <div className="flex justify-center mt-8">
