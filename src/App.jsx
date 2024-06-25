@@ -14,6 +14,9 @@ import { BiSearch } from "react-icons/bi";
 import Highlighter from "react-highlight-words";
 import Publisher from "./pages/admin/Publisher";
 
+import History from "./pages/user/History";
+import Library from "./pages/user/Library";
+
 function App() {
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
@@ -142,6 +145,14 @@ function App() {
         {
           path: "/books",
           element: <UserBook />,
+        },
+        {
+          path: "/library",
+          element: <Library />,
+        },
+        {
+          path: "/history",
+          element: <History />,
         },
       ],
     },

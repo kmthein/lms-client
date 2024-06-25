@@ -38,8 +38,11 @@ const Navbar = () => {
             <Link to="/books">
               <li>Books</li>
             </Link>
-            <Link to="/">
+            <Link to="/library">
               <li>My Library</li>
+            </Link>
+            <Link to="/history">
+              <li>History</li>
             </Link>
           </ul>
           <ul className="flex gap-5">

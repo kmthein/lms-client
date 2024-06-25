@@ -30,7 +30,7 @@ const Cart = ({ onClose, open }) => {
                 alt="book cover"
                 src={
                   cart.bookImg
-                    ? "http://localhost:8080/" + cart.bookImg
+                    ? import.meta.env.VITE_API + "/" + cart.bookImg
                     : "https://dummyimage.com/200x300/cccccc/ffffff.png&text=No+Image"
                 }
                 className="h-[100px] w-[100px] object-cover rounded-t-md"
