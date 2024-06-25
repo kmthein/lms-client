@@ -6,15 +6,7 @@ import BookForm from "../../components/admin/book/BookForm";
 import { getAllBooks } from "../../api/book";
 import noImage from "../../assets/no_img.jpg";
 
-const Books = ({
-  searchText,
-  setSearchText,
-  searchedColumn,
-  setSearchedColumn,
-  handleSearch,
-  handleReset,
-  getColumnSearchProps,
-}) => {
+const Books = ({ getColumnSearchProps }) => {
   const [data, setData] = useState([]);
   const [editForm, setEditForm] = useState(false);
   const [selectedBookId, setSelectedBookId] = useState(null);
