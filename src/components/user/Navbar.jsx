@@ -5,11 +5,15 @@ import { CiBookmark } from "react-icons/ci";
 import { Link } from "react-router-dom";
 import RegisterForm from "./Register/RegisterForm";
 import Cart from "../../features/cart/Cart";
+import { useSelector } from "react-redux";
+import { allCart } from "../../features/cart/cartSlice";
 
 const Navbar = () => {
   const { Search } = Input;
   const [open, setOpen] = useState(false);
   const [isDrawer, setIsDrawer] = useState(false);
+
+  const { cartItem } = useSelector(allCart);
 
   const showModal = () => {
     setOpen(true);
@@ -50,12 +54,16 @@ const Navbar = () => {
               />
               {/* <span>Account</span> */}
             </li>
-            <li className="flex items-center gap-1">
+            <li className="flex items-center gap-1 relative">
               <CiBookmark
                 className="text-xl cursor-pointer"
                 onClick={handleDrawer}
               />
-              {/* <span>Cart</span> */}
+              {cartItem.length > 0 && (
+                <span className=" bg-[#dc3232] text-white text-xs w-5 h-5 inline-flex items-center justify-center rounded-full absolute -right-3 -top-3">
+                  {cartItem.length}
+                </span>
+              )}
             </li>
           </ul>
         </div>

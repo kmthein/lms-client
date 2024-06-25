@@ -32,9 +32,13 @@ const BookDetails = () => {
   return (
     <div className="w-[80%] mx-auto">
       <div className="flex my-10 gap-14">
-        <div className=" w-[350px] h-[500px]">
+        <div className=" w-[350px] h-[500px] book_cover rounded-lg">
           <img
-            src={import.meta.env.VITE_API + book?.bookImg}
+            src={
+              book?.bookImg != ""
+                ? import.meta.env.VITE_API + book?.bookImg
+                : "https://dummyimage.com/200x300/cccccc/ffffff.png&text=No+Image"
+            }
             className=" object-cover w-full h-full rounded-lg"
           />
         </div>
@@ -90,7 +94,7 @@ const BookDetails = () => {
           <div>
             {book?.stock > 0 ? (
               <button
-                className=" bg-amber-500 p-2 rounded-sm text-sm"
+                className=" bg-amber-500 hover:bg-[#ed9454] duration-150 p-2 rounded-sm text-sm"
                 onClick={() => {
                   setOpen(true);
                   setIsRent(true);
@@ -100,7 +104,7 @@ const BookDetails = () => {
               </button>
             ) : (
               <button
-                className=" bg-amber-500 p-2 rounded-sm text-sm"
+                className=" bg-amber-500 hover:bg-[#ed9454] p-2 rounded-sm text-sm"
                 onClick={() => {
                   setOpen(true);
                   setIsRent(false);
@@ -114,8 +118,8 @@ const BookDetails = () => {
         </div>
       </div>
       <div>
-        <h2 className="title mb-4 text-lg">Reviews</h2>
         <div className="mb-6">
+          <h2 className="title mb-4 text-lg">Write Review</h2>
           <form className="flex w-full">
             <div className=" flex gap-3 w-full">
               <div>
@@ -146,7 +150,8 @@ const BookDetails = () => {
             </div>
           </form>
         </div>
-        <div className=" flex gap-3 mb-4">
+        <h2 className="title mb-4 text-lg">Reviews</h2>
+        <div className=" flex gap-3 mb-6">
           <div>
             <Avatar
               icon={
@@ -159,7 +164,7 @@ const BookDetails = () => {
             />
           </div>
           <div>
-            <h5 className="font-medium">User 1</h5>
+            <h5 className="font-medium mb-2">User 1</h5>
             <span className=" text-sm">
               Lorem ipsum dolor, sit amet consectetur adipisicing elit. Totam
               quasi aspernatur temporibus dicta eaque repudiandae. Labore
@@ -170,7 +175,7 @@ const BookDetails = () => {
             </span>
           </div>
         </div>
-        <div className=" flex gap-3 mb-4">
+        <div className=" flex gap-3 mb-6">
           <div>
             <Avatar
               icon={
@@ -183,7 +188,7 @@ const BookDetails = () => {
             />
           </div>
           <div>
-            <h5 className="font-medium">User 1</h5>
+            <h5 className="font-medium mb-2">User 1</h5>
             <span className=" text-sm">
               Lorem ipsum dolor, sit amet consectetur adipisicing elit. Totam
               quasi aspernatur temporibus dicta eaque repudiandae. Labore
@@ -194,7 +199,7 @@ const BookDetails = () => {
             </span>
           </div>
         </div>
-        <div className=" flex gap-3 mb-4">
+        <div className=" flex gap-3 mb-6">
           <div>
             <Avatar
               icon={
@@ -207,7 +212,31 @@ const BookDetails = () => {
             />
           </div>
           <div>
-            <h5 className="font-medium">User 1</h5>
+            <h5 className="font-medium mb-2">User 1</h5>
+            <span className=" text-sm">
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Totam
+              quasi aspernatur temporibus dicta eaque repudiandae. Labore
+              cupiditate laboriosam culpa eveniet optio itaque quasi magni sequi
+              ab! Ea illum corrupti harum consectetur blanditiis ratione
+              adipisci neque laboriosam voluptatem maiores cupiditate earum qui
+              commodi enim ex voluptas, tempore magnam ullam modi eius.
+            </span>
+          </div>
+        </div>
+        <div className=" flex gap-3 mb-6">
+          <div>
+            <Avatar
+              icon={
+                book?.author.authorImg != null ? (
+                  <img src={book?.author.authorImg} />
+                ) : (
+                  <BiUser />
+                )
+              }
+            />
+          </div>
+          <div>
+            <h5 className="font-medium mb-2">User 1</h5>
             <span className=" text-sm">
               Lorem ipsum dolor, sit amet consectetur adipisicing elit. Totam
               quasi aspernatur temporibus dicta eaque repudiandae. Labore

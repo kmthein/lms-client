@@ -105,9 +105,7 @@ const BookForm = ({
       if (response.data.bookImg != "") {
         const oldImages = import.meta.env.VITE_API + response.data.bookImg;
         setPreviewImg((prev) => [...prev, oldImages]);
-        // form.setFieldValue("bookImg", response.data.bookImg);
       }
-      // setImages()
       form.setFieldValue("title", title);
       form.setFieldValue("publishYear", publishYear);
       form.setFieldValue("stock", stock);
@@ -154,7 +152,6 @@ const BookForm = ({
     images.forEach((file) => {
       formData.append("files", file);
     });
-    console.log(values);
     let response;
     if (editForm) {
       formData.append("id", oldBook.id);
@@ -185,10 +182,6 @@ const BookForm = ({
     setOpen(false);
     setOldBook(null);
     setEditForm(false);
-  };
-
-  const handleChange = (value) => {
-    console.log(`selected ${value}`);
   };
 
   const deleteHandler = (img) => {

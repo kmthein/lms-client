@@ -10,8 +10,11 @@ import {
   Row,
   Col,
   Typography,
+  message,
 } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
+import { FaPlus, FaTrashAlt } from "react-icons/fa";
+import { registerUser } from "../../../api/auth";
 
 const { Option } = Select;
 const { Title } = Typography;
@@ -20,15 +23,48 @@ const RegisterForm = ({ open, setOpen }) => {
   const [form] = Form.useForm();
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [signIn, setsignIn] = useState(false);
+  const [previewImg, setPreviewImg] = useState([]);
+  const [images, setImages] = useState([]);
+  const [imgCount, setImgCount] = useState(0);
+
+  const [messageApi, contextHolder] = message.useMessage();
 
   const onCreate = async (values) => {
     setConfirmLoading(true);
     try {
       console.log(values);
-      setOpen(false);
-      form.resetFields();
+      const formData = new FormData();
+      for (const key in values) {
+        formData.append(key, values[key]);
+      }
+      formData.delete("image");
+      formData.append("role", "MEMBER");
+      images.forEach((file) => {
+        formData.append("files", file);
+      });
+      const response = await registerUser(formData);
+      console.log(response);
+      if (response.status == 200) {
+        setOpen(false);
+        form.resetFields();
+        setPreviewImg([]);
+        setImages([]);
+        messageApi.open({
+          type: "success",
+          content: "Member registration successful",
+        });
+      } else {
+        messageApi.open({
+          type: "error",
+          content: "This is an error message",
+        });
+      }
     } catch (error) {
       console.error("Failed to register:", error);
+      messageApi.open({
+        type: "error",
+        content: "This is an error message",
+      });
     } finally {
       setConfirmLoading(false);
     }
@@ -44,6 +80,33 @@ const RegisterForm = ({ open, setOpen }) => {
     form.resetFields();
   };
 
+  const deleteHandler = (img) => {
+    const indexToDelete = previewImg.findIndex((e) => e == img);
+    if (indexToDelete != -1) {
+      const updatedSelectedImg = [...images];
+      updatedSelectedImg.splice(indexToDelete, 1);
+
+      setImgCount((prev) => prev - 1);
+      setImages(updatedSelectedImg);
+      setPreviewImg(previewImg.filter((e) => e != img));
+      URL.revokeObjectURL(img);
+    }
+    setPreviewImg(null);
+  };
+
+  const onChangeHandler = (e) => {
+    const selectedImages = e.target.files;
+    const selectedImagesArray = Array.from(selectedImages);
+    setImages(selectedImagesArray);
+
+    setImgCount((prev) => prev + selectedImagesArray.length);
+
+    const previewImagesArray = selectedImagesArray.map((img) => {
+      return URL.createObjectURL(img);
+    });
+    setPreviewImg((prev) => [previewImagesArray]);
+  };
+
   return (
     <Modal
       footer={null}
@@ -53,6 +116,7 @@ const RegisterForm = ({ open, setOpen }) => {
       onCancel={handleCancel}
       width={800}
     >
+      {contextHolder}
       <Form
         form={form}
         name={signIn ? "user_signin" : "user_registration"}
@@ -146,15 +210,41 @@ const RegisterForm = ({ open, setOpen }) => {
 
             <Row gutter={16}>
               <Col xs={24} sm={12}>
-                <Form.Item name="image" label="Profile Image">
-                  <Upload listType="picture" maxCount={1}>
-                    <Button icon={<UploadOutlined />}>Upload</Button>
-                  </Upload>
+                <Form.Item name="book_img" label="Book Image">
+                  {(images.length < 1 || previewImg == []) && (
+                    <label htmlFor="upload">
+                      <div className=" border-[2px] border-dashed rounded-md w-full flex items-center h-[100px]">
+                        <FaPlus className="mx-auto text-xl cursor-pointer text-black/50 hover:text-black/70 hover:text-[1.3rem]" />
+                      </div>
+                    </label>
+                  )}
+                  <input
+                    type="file"
+                    id="upload"
+                    name="files"
+                    multiple
+                    onChange={onChangeHandler}
+                    accept="image/*"
+                  />
+                  {previewImg &&
+                    previewImg.map((img, index) => (
+                      <div className=" h-32 relative" key={index}>
+                        <img
+                          src={img}
+                          key={index}
+                          className="w-full h-full object-contain rounded-md"
+                        />
+                        <FaTrashAlt
+                          onClick={() => deleteHandler(img)}
+                          className="z-50 absolute bottom-2 right-4 text-red-500 text-md cursor-pointer"
+                        />
+                      </div>
+                    ))}
                 </Form.Item>
               </Col>
               <Col xs={24} sm={12}>
                 <Form.Item
-                  name="membership"
+                  name="member_type"
                   label="Membership Type"
                   rules={[
                     {
