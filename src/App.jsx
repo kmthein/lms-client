@@ -12,6 +12,9 @@ import Publisher from "./pages/admin/Publisher";
 import useSearch from "./hooks/useSearch";
 import BookDetails from "./pages/user/BookDetails";
 
+import History from "./pages/user/History";
+import Library from "./pages/user/Library";
+
 function App() {
   const {
     searchText,
@@ -36,8 +39,17 @@ function App() {
           element: <UserBook />,
         },
         {
+<<<<<<< HEAD
+          path: "/library",
+          element: <Library />,
+        },
+        {
+          path: "/history",
+          element: <History />,
+=======
           path: "/books/:id",
           element: <BookDetails />,
+>>>>>>> cc61525788ff098a9dcb1b07a917e738f8c78b8a
         },
       ],
     },

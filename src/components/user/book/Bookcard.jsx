@@ -1,4 +1,4 @@
-import { Card } from "antd";
+import { Card, Space, Tag } from "antd";
 import Meta from "antd/es/card/Meta";
 import { CiHeart } from "react-icons/ci";
 import { FaHeart } from "react-icons/fa";
@@ -40,7 +40,7 @@ const Bookcard = ({ book }) => {
             alt="book cover"
             src={
               book.bookImg
-                ? "http://localhost:8080/" + book.bookImg
+                ? import.meta.env.VITE_API + "/" + book.bookImg
                 : "https://dummyimage.com/200x300/cccccc/ffffff.png&text=No+Image"
             }
             className="h-[280px] w-full object-cover rounded-t-md"
@@ -51,9 +51,7 @@ const Bookcard = ({ book }) => {
         <Meta
           title={
             <div className="flex justify-between items-center">
-              <h4 className="text-[14px]">
-                {book.title} ({book.publishYear ? book.publishYear : "Unknown"})
-              </h4>
+              <h4 className="text-[14px]">{book.title}</h4>
               {isFav ? (
                 <FaHeart size={30} onClick={handleFav} color="red" />
               ) : (
@@ -66,11 +64,22 @@ const Bookcard = ({ book }) => {
               <p className="mb-1">
                 {book.author.name ? book.author.name : "Unknown"} (Author)
               </p>
-              <p className="text-[12px]">
-                {book.genres.length > 0
-                  ? book.genres.map((genre) => genre.genreName).join(", ")
-                  : "Unknown Genre"}
+              <p type="secondary" className="block mt-2">
+                Published on: {book.publishYear}
               </p>
+              <div className="mt-2">
+                <Space size={[0, 8]} wrap>
+                  {book.genres.length > 0 ? (
+                    book.genres.map((genre) => (
+                      <Tag key={genre.id} color="blue">
+                        {genre.genreName}
+                      </Tag>
+                    ))
+                  ) : (
+                    <Tag color="gray">Unknown Genre</Tag>
+                  )}
+                </Space>
+              </div>
             </div>
           }
         />
