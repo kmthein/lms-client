@@ -15,6 +15,8 @@ import {
 import { UploadOutlined } from "@ant-design/icons";
 import { FaPlus, FaTrashAlt } from "react-icons/fa";
 import { loginUser, registerUser } from "../../../api/auth";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../../../features/user/userSlice";
 
 const { Option } = Select;
 const { Title } = Typography;
@@ -29,6 +31,8 @@ const RegisterForm = ({ open, setOpen }) => {
 
   const [messageApi, contextHolder] = message.useMessage();
 
+  const dispatch = useDispatch();
+
   const onCreate = async (values) => {
     setConfirmLoading(true);
     const formData = new FormData();
@@ -37,7 +41,27 @@ const RegisterForm = ({ open, setOpen }) => {
         formData.append("email", values.email);
         formData.append("password", values.password);
         const response = await loginUser(formData);
+        const status = response.data.status;
         console.log(response.data);
+        if (status == "401" || status == "403") {
+          messageApi.open({
+            type: "error",
+            content: response.data.message,
+          });
+        } else if (status == "200") {
+          messageApi.open({
+            type: "success",
+            content: response.data.message,
+          });
+          const { token, memberDTO } = response.data;
+          localStorage.setItem("token", JSON.stringify(token));
+          localStorage.setItem("user", JSON.stringify(memberDTO));
+          dispatch(
+            login({ user: memberDTO, token })
+          );
+          setOpen(false);
+          form.resetFields();
+        }
       } else {
         for (const key in values) {
           formData.append(key, values[key]);
@@ -48,7 +72,6 @@ const RegisterForm = ({ open, setOpen }) => {
           formData.append("files", file);
         });
         const response = await registerUser(formData);
-        console.log(response);
         if (response.data == "Email already existed.") {
           messageApi.open({
             type: "error",

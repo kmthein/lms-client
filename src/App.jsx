@@ -39,17 +39,16 @@ function App() {
           element: <UserBook />,
         },
         {
-<<<<<<< HEAD
           path: "/library",
           element: <Library />,
         },
         {
           path: "/history",
           element: <History />,
-=======
+        },
+        {
           path: "/books/:id",
           element: <BookDetails />,
->>>>>>> cc61525788ff098a9dcb1b07a917e738f8c78b8a
         },
       ],
     },
