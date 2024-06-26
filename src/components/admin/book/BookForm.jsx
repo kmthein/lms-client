@@ -100,7 +100,6 @@ const BookForm = ({
     try {
       const response = await getBookById(selectedBookId);
       const { title, publishYear, stock, author, publisher } = response.data;
-      console.log(response.data);
       setOldBook(response.data);
       if (response.data.bookImg != "") {
         const oldImages = import.meta.env.VITE_API + response.data.bookImg;
@@ -272,7 +271,6 @@ const BookForm = ({
             style={{
               width: 120,
             }}
-            onChange={handleChange}
             options={allAuthors}
           />
         </Form.Item>
@@ -293,7 +291,6 @@ const BookForm = ({
             style={{
               width: 120,
             }}
-            onChange={handleChange}
             options={allPublishers}
           />
         </Form.Item>
@@ -314,7 +311,6 @@ const BookForm = ({
             }}
             placeholder="select book genre"
             defaultValue={oldGenres}
-            onChange={handleChange}
             options={allGenres}
             optionRender={(option) => <Space>{option.data.desc}</Space>}
           />

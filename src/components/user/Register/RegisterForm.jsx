@@ -14,7 +14,7 @@ import {
 } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { FaPlus, FaTrashAlt } from "react-icons/fa";
-import { registerUser } from "../../../api/auth";
+import { loginUser, registerUser } from "../../../api/auth";
 
 const { Option } = Select;
 const { Title } = Typography;
@@ -31,43 +31,53 @@ const RegisterForm = ({ open, setOpen }) => {
 
   const onCreate = async (values) => {
     setConfirmLoading(true);
+    const formData = new FormData();
     try {
-      console.log(values);
-      const formData = new FormData();
-      for (const key in values) {
-        formData.append(key, values[key]);
-      }
-      formData.delete("image");
-      formData.append("role", "MEMBER");
-      images.forEach((file) => {
-        formData.append("files", file);
-      });
-      const response = await registerUser(formData);
-      console.log(response);
-      if (response.status == 200) {
-        setOpen(false);
-        form.resetFields();
-        setPreviewImg([]);
-        setImages([]);
-        messageApi.open({
-          type: "success",
-          content: "Member registration successful",
-        });
+      if (signIn) {
+        formData.append("email", values.email);
+        formData.append("password", values.password);
+        const response = await loginUser(formData);
+        console.log(response.data);
       } else {
-        messageApi.open({
-          type: "error",
-          content: "This is an error message",
+        for (const key in values) {
+          formData.append(key, values[key]);
+        }
+        formData.delete("image");
+        formData.append("role", "MEMBER");
+        images.forEach((file) => {
+          formData.append("files", file);
         });
+        const response = await registerUser(formData);
+        console.log(response);
+        if (response.data == "Email already existed.") {
+          messageApi.open({
+            type: "error",
+            content: response.data,
+          });
+        } else if (response.data == "User created successfully") {
+          setOpen(false);
+          form.resetFields();
+          setPreviewImg([]);
+          setImages([]);
+          messageApi.open({
+            type: "success",
+            content: response.data,
+          });
+        } else {
+          messageApi.open({
+            type: "error",
+            content: response.data,
+          });
+        }
       }
     } catch (error) {
-      console.error("Failed to register:", error);
+      console.error("Failed:", error);
       messageApi.open({
         type: "error",
-        content: "This is an error message",
+        content: "Something went wrong.",
       });
-    } finally {
-      setConfirmLoading(false);
     }
+    setConfirmLoading(false);
   };
 
   const handleCancel = () => {
@@ -114,7 +124,7 @@ const RegisterForm = ({ open, setOpen }) => {
       onOk={() => form.submit()}
       confirmLoading={confirmLoading}
       onCancel={handleCancel}
-      width={800}
+      width={signIn ? 500 : 800}
     >
       {contextHolder}
       <Form
@@ -124,7 +134,7 @@ const RegisterForm = ({ open, setOpen }) => {
         layout="vertical"
         initialValues={{ expired_date: 7 }}
       >
-        <Title level={3} className="text-center mb-4">
+        <Title level={3} className="text-center my-4">
           {signIn ? "Sign In" : "Register"}
         </Title>
 
@@ -210,7 +220,7 @@ const RegisterForm = ({ open, setOpen }) => {
 
             <Row gutter={16}>
               <Col xs={24} sm={12}>
-                <Form.Item name="book_img" label="Book Image">
+                <Form.Item name="user_img" label="User Image">
                   {(images.length < 1 || previewImg == []) && (
                     <label htmlFor="upload">
                       <div className=" border-[2px] border-dashed rounded-md w-full flex items-center h-[100px]">
@@ -319,7 +329,7 @@ const RegisterForm = ({ open, setOpen }) => {
         <Form.Item>
           {!signIn ? (
             <p className="text-center">
-              If You Have Already An Account?{" "}
+              If you have already an account?{" "}
               <span
                 className="text-blue-400 cursor-pointer underline"
                 onClick={handleSignIn}
@@ -329,7 +339,7 @@ const RegisterForm = ({ open, setOpen }) => {
             </p>
           ) : (
             <p className="text-center">
-              If You don't Have An Account?{" "}
+              If you don't have an account?{" "}
               <span
                 className="text-blue-400 cursor-pointer underline"
                 onClick={handleSignIn}

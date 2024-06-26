@@ -12,3 +12,12 @@ export const registerUser = async (payload) => {
     return error.response;
   }
 };
+
+export const loginUser = async (payload) => {
+  try {
+    const response = await api.post("api/user/login", payload);
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
