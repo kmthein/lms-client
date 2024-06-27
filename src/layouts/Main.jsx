@@ -5,10 +5,10 @@ import Navbar from "../components/user/Navbar";
 
 const Main = () => {
   return (
-    <>
+    <div className=" max-w-full">
       <Navbar />
       <Outlet />
-    </>
+    </div>
   );
 };
 

@@ -100,7 +100,6 @@ const BookForm = ({
     try {
       const response = await getBookById(selectedBookId);
       const { title, publishYear, stock, author, publisher } = response.data;
-      console.log(response.data);
       setOldBook(response.data);
       if (response.data.bookImg != "") {
         const oldImages = import.meta.env.VITE_API + response.data.bookImg;

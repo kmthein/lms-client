@@ -64,10 +64,9 @@ const Book = () => {
   const currentBooks = filteredBooks.slice(indexOfFirst, indexOfLast);
 
   return (
-    <div className="w-[90%] mx-auto flex flex-col lg:flex-row gap-4 mt-8">
-      <div className="w-full lg:w-[20%] mb-4 lg:mb-0">
+    <div className="w-full lg:w-[90%] mx-auto flex flex-col lg:flex-row mt-8">
+      <div className="w-[20%] mb-4 lg:mb-0">
         <h1 className="font-medium text-xl mb-4">Filter</h1>
-
         <Radio.Group onChange={handleSortChange} value={sortOption}>
           <Space direction="vertical">
             <Radio value={""}>Default</Radio>
@@ -83,15 +82,23 @@ const Book = () => {
           value={selectedGenre}
         >
           <Option value="">All Genre</Option>
+<<<<<<< HEAD
           {genres.length > 0 &&
             genres.map((genre) => (
               <Option key={genre.genreId} value={genre.genreName}>
                 {genre.genreName}
               </Option>
             ))}
+=======
+          {genres && genres.length > 0 && genres.map((genre) => (
+            <Option key={genre.genreId} value={genre.genreName}>
+              {genre.genreName}
+            </Option>
+          ))}
+>>>>>>> aa5094d5ac71087f55c0f5e30905b89aaaed237e
         </Select>
       </div>
-      <div className="flex-1">
+      <div className=" lg:w-[80%]">
         <h1 className="font-medium text-xl mb-4">All Books</h1>
         <div className="flex flex-wrap gap-6">
           {currentBooks.map((book) => (
