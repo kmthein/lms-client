@@ -15,6 +15,7 @@ import BookDetails from "./pages/user/BookDetails";
 import History from "./pages/user/History";
 import Library from "./pages/user/Library";
 import Rent from "./pages/admin/Rent";
+import Reservation from "./pages/admin/Reservation";
 
 function App() {
   const {
@@ -78,6 +79,10 @@ function App() {
         {
           path: "rent",
           element: <Rent />,
+        },
+        {
+          path: "reservation",
+          element: <Reservation />,
         },
         {
           path: "genre",

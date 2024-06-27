@@ -42,7 +42,6 @@ const RegisterForm = ({ open, setOpen }) => {
         formData.append("password", values.password);
         const response = await loginUser(formData);
         const status = response.data.status;
-        console.log(response.data);
         if (status == "401" || status == "403") {
           messageApi.open({
             type: "error",
@@ -56,9 +55,7 @@ const RegisterForm = ({ open, setOpen }) => {
           const { token, memberDTO } = response.data;
           localStorage.setItem("token", JSON.stringify(token));
           localStorage.setItem("user", JSON.stringify(memberDTO));
-          dispatch(
-            login({ user: memberDTO, token })
-          );
+          dispatch(login({ user: memberDTO, token }));
           setOpen(false);
           form.resetFields();
         }

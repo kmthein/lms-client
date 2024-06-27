@@ -1,5 +1,13 @@
 import React from "react";
-import { BiBook, BiCategory, BiHome, BiLibrary } from "react-icons/bi";
+import {
+  BiBook,
+  BiBookAdd,
+  BiBookBookmark,
+  BiBookmark,
+  BiCategory,
+  BiHome,
+  BiLibrary,
+} from "react-icons/bi";
 import { BsPerson } from "react-icons/bs";
 import { CgProfile } from "react-icons/cg";
 import { NavLink } from "react-router-dom";
@@ -19,7 +27,7 @@ const Sidebar = () => {
           end
         >
           <BiHome />
-          <span className="ml-3">Home</span>
+          <span className="ml-3">Dashboard</span>
         </NavLink>
         <NavLink
           className={({ isActive }) =>
@@ -28,8 +36,18 @@ const Sidebar = () => {
           to="rent"
           end
         >
-          <BiHome />
+          <BiBookAdd />
           <span className="ml-3">Rent</span>
+        </NavLink>
+        <NavLink
+          className={({ isActive }) =>
+            isActive ? "text-[#1a1a1a] font-medium" : "text-[#5f5f5f]"
+          }
+          to="reservation"
+          end
+        >
+          <BiBookBookmark />
+          <span className="ml-3">Reservation</span>
         </NavLink>
         <NavLink
           className={({ isActive }) =>
@@ -66,15 +84,6 @@ const Sidebar = () => {
         >
           <BsPerson />
           <span className="ml-3">Publisher</span>
-        </NavLink>
-        <NavLink
-          className={({ isActive }) =>
-            isActive ? "text-[#1a1a1a] font-medium" : "text-[#5f5f5f]"
-          }
-          to="mylibrary"
-        >
-          <BiLibrary />
-          <span className="ml-3">My Library</span>
         </NavLink>
         <NavLink
           className={({ isActive }) =>

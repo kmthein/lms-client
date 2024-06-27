@@ -1,257 +1,57 @@
-import React from "react";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import React, { useEffect, useState } from "react";
+import HomeCard from "../../components/admin/home/HomeCard";
+import { BiBook, BiBookAdd, BiCategory } from "react-icons/bi";
+import { BsPerson } from "react-icons/bs";
+import { getAllCounts } from "../../api/dashboard";
 
 const Home = () => {
-  const settings = {
-    infinite: true,
-    speed: 500,
-    slidesToShow: 5,
-    slidesToScroll: 3,
+  const initialCount = {
+    bookCount: null,
+    genreCount: null,
+    authorCount: null,
+    totalRentCount: null,
   };
 
+  const [totalCount, setTotalCount] = useState(initialCount);
+
+  const getAllCountHandler = async () => {
+    const response = await getAllCounts();
+    const { bookCount, genreCount, authorCount, totalRentCount } =
+      response.data;
+    setTotalCount({ bookCount, genreCount, authorCount, totalRentCount });
+  };
+
+  const { bookCount, genreCount, authorCount, totalRentCount } = totalCount;
+
+  useEffect(() => {
+    getAllCountHandler();
+  }, []);
   return (
-    <div className="">
-      <section className=" mb-10">
-        <h1 className=" font-medium mb-2">New Arrival</h1>
-        <div className=" h-[200px]">
-          {/* <h3 className='text-[#fff]'>New Arrival</h3> */}
-          <div className=" w-full bg-white rounded-md">
-            <div className="slider-container max-w-full pt-3 pb-2">
-              <Slider {...settings}>
-                <div>
-                  <img
-                    src="https://www.adobe.com/express/create/cover/media_19d5e212dbe8553614c3a9fbabd4d7f219ab01c85.png?width=750&format=png&optimize=medium"
-                    alt="img"
-                    className=" h-[180px] w-[130px]"
-                  />
-                </div>
-                <div>
-                  <img
-                    src="https://www.adobe.com/express/create/cover/media_19d5e212dbe8553614c3a9fbabd4d7f219ab01c85.png?width=750&format=png&optimize=medium"
-                    alt="img"
-                    className=" h-[180px] w-[130px]"
-                  />
-                </div>
-                <div>
-                  <img
-                    src="https://www.adobe.com/express/create/cover/media_19d5e212dbe8553614c3a9fbabd4d7f219ab01c85.png?width=750&format=png&optimize=medium"
-                    alt="img"
-                    className=" h-[180px] w-[130px]"
-                  />
-                </div>
-                <div>
-                  <img
-                    src="https://www.adobe.com/express/create/cover/media_19d5e212dbe8553614c3a9fbabd4d7f219ab01c85.png?width=750&format=png&optimize=medium"
-                    alt="img"
-                    className=" h-[180px] w-[130px]"
-                  />
-                </div>
-                <div>
-                  <img
-                    src="https://www.adobe.com/express/create/cover/media_19d5e212dbe8553614c3a9fbabd4d7f219ab01c85.png?width=750&format=png&optimize=medium"
-                    alt="img"
-                    className=" h-[180px] w-[130px]"
-                  />
-                </div>
-                <div>
-                  <img
-                    src="https://www.adobe.com/express/create/cover/media_19d5e212dbe8553614c3a9fbabd4d7f219ab01c85.png?width=750&format=png&optimize=medium"
-                    alt="img"
-                    className=" h-[180px] w-[130px]"
-                  />
-                </div>
-                <div>
-                  <img
-                    src="https://www.adobe.com/express/create/cover/media_19d5e212dbe8553614c3a9fbabd4d7f219ab01c85.png?width=750&format=png&optimize=medium"
-                    alt="img"
-                    className=" h-[180px] w-[130px]"
-                  />
-                </div>
-                <div>
-                  <img
-                    src="https://www.adobe.com/express/create/cover/media_19d5e212dbe8553614c3a9fbabd4d7f219ab01c85.png?width=750&format=png&optimize=medium"
-                    alt="img"
-                    className=" h-[180px] w-[130px]"
-                  />
-                </div>
-                <div>
-                  <img
-                    src="https://www.adobe.com/express/create/cover/media_19d5e212dbe8553614c3a9fbabd4d7f219ab01c85.png?width=750&format=png&optimize=medium"
-                    alt="img"
-                    className=" h-[180px] w-[130px]"
-                  />
-                </div>
-                <div>
-                  <img
-                    src="https://www.adobe.com/express/create/cover/media_19d5e212dbe8553614c3a9fbabd4d7f219ab01c85.png?width=750&format=png&optimize=medium"
-                    alt="img"
-                    className=" h-[180px] w-[130px]"
-                  />
-                </div>
-                <div>
-                  <img
-                    src="https://www.adobe.com/express/create/cover/media_19d5e212dbe8553614c3a9fbabd4d7f219ab01c85.png?width=750&format=png&optimize=medium"
-                    alt="img"
-                    className=" h-[180px] w-[130px]"
-                  />
-                </div>
-              </Slider>
-            </div>
-          </div>
-        </div>
-      </section>
-      <section className=" mb-10">
-        <h1 className=" font-medium mb-2">Recommended For You</h1>
-        <div>
-          {/* <h3 className='text-[#fff]'>New Arrival</h3> */}
-          <div className=" w-full">
-            <div className="max-w-full pt-3 pb-2">
-              <div className="flex gap-10 flex-wrap w-[100%] overflow-x-hidden">
-                <div className=" bg-white w-[160px] px-4 pt-4 rounded-md">
-                  <img
-                    src="https://marketplace.canva.com/EAFaQMYuZbo/1/0/1003w/canva-brown-rusty-mystery-novel-book-cover-hG1QhA7BiBU.jpg"
-                    alt="img"
-                    className=" h-[180px] w-[130px] rounded-sm mb-2"
-                  />
-                  <h4 className=" text-[14px]">Don’t Make Me think</h4>
-                  <p className=" text-[12px] pb-3">Steve Krug, 2000</p>
-                </div>
-                <div className=" bg-white w-[160px] px-4 pt-4 rounded-md">
-                  <img
-                    src="https://marketplace.canva.com/EAFaQMYuZbo/1/0/1003w/canva-brown-rusty-mystery-novel-book-cover-hG1QhA7BiBU.jpg"
-                    alt="img"
-                    className=" h-[180px] w-[130px] rounded-sm mb-2"
-                  />
-                  <h4 className=" text-[14px]">Don’t Make Me think</h4>
-                  <p className=" text-[12px] pb-3">Steve Krug, 2000</p>
-                </div>
-                <div className=" bg-white w-[160px] px-4 pt-4 rounded-md">
-                  <img
-                    src="https://marketplace.canva.com/EAFaQMYuZbo/1/0/1003w/canva-brown-rusty-mystery-novel-book-cover-hG1QhA7BiBU.jpg"
-                    alt="img"
-                    className=" h-[180px] w-[130px] rounded-sm mb-2"
-                  />
-                  <h4 className=" text-[14px]">Don’t Make Me think</h4>
-                  <p className=" text-[12px] pb-3">Steve Krug, 2000</p>
-                </div>
-                <div className=" bg-white w-[160px] px-4 pt-4 rounded-md">
-                  <img
-                    src="https://marketplace.canva.com/EAFaQMYuZbo/1/0/1003w/canva-brown-rusty-mystery-novel-book-cover-hG1QhA7BiBU.jpg"
-                    alt="img"
-                    className=" h-[180px] w-[130px] rounded-sm mb-2"
-                  />
-                  <h4 className=" text-[14px]">Don’t Make Me think</h4>
-                  <p className=" text-[12px] pb-3">Steve Krug, 2000</p>
-                </div>
-                <div className=" bg-white w-[160px] px-4 pt-4 rounded-md">
-                  <img
-                    src="https://marketplace.canva.com/EAFaQMYuZbo/1/0/1003w/canva-brown-rusty-mystery-novel-book-cover-hG1QhA7BiBU.jpg"
-                    alt="img"
-                    className=" h-[180px] w-[130px] rounded-sm mb-2"
-                  />
-                  <h4 className=" text-[14px]">Don’t Make Me think</h4>
-                  <p className=" text-[12px] pb-3">Steve Krug, 2000</p>
-                </div>
-                <div className=" bg-white w-[160px] px-4 pt-4 rounded-md">
-                  <img
-                    src="https://marketplace.canva.com/EAFaQMYuZbo/1/0/1003w/canva-brown-rusty-mystery-novel-book-cover-hG1QhA7BiBU.jpg"
-                    alt="img"
-                    className=" h-[180px] w-[130px] rounded-sm mb-2"
-                  />
-                  <h4 className=" text-[14px]">Don’t Make Me think</h4>
-                  <p className=" text-[12px] pb-3">Steve Krug, 2000</p>
-                </div>
-                <div className=" bg-white w-[160px] px-4 pt-4 rounded-md">
-                  <img
-                    src="https://marketplace.canva.com/EAFaQMYuZbo/1/0/1003w/canva-brown-rusty-mystery-novel-book-cover-hG1QhA7BiBU.jpg"
-                    alt="img"
-                    className=" h-[180px] w-[130px] rounded-sm mb-2"
-                  />
-                  <h4 className=" text-[14px]">Don’t Make Me think</h4>
-                  <p className=" text-[12px] pb-3">Steve Krug, 2000</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      <section className=" mb-10">
-        <h1 className=" font-medium mb-2">Top Trending</h1>
-        <div>
-          {/* <h3 className='text-[#fff]'>New Arrival</h3> */}
-          <div className=" w-full">
-            <div className="max-w-full pt-3 pb-2">
-              <div className="flex gap-10 flex-wrap w-[100%] overflow-x-hidden">
-                <div className=" bg-white w-[160px] px-4 pt-4 rounded-md">
-                  <img
-                    src="https://marketplace.canva.com/EAFaQMYuZbo/1/0/1003w/canva-brown-rusty-mystery-novel-book-cover-hG1QhA7BiBU.jpg"
-                    alt="img"
-                    className=" h-[180px] w-[130px] rounded-sm mb-2"
-                  />
-                  <h4 className=" text-[14px]">Don’t Make Me think</h4>
-                  <p className=" text-[12px] pb-3">Steve Krug, 2000</p>
-                </div>
-                <div className=" bg-white w-[160px] px-4 pt-4 rounded-md">
-                  <img
-                    src="https://marketplace.canva.com/EAFaQMYuZbo/1/0/1003w/canva-brown-rusty-mystery-novel-book-cover-hG1QhA7BiBU.jpg"
-                    alt="img"
-                    className=" h-[180px] w-[130px] rounded-sm mb-2"
-                  />
-                  <h4 className=" text-[14px]">Don’t Make Me think</h4>
-                  <p className=" text-[12px] pb-3">Steve Krug, 2000</p>
-                </div>
-                <div className=" bg-white w-[160px] px-4 pt-4 rounded-md">
-                  <img
-                    src="https://marketplace.canva.com/EAFaQMYuZbo/1/0/1003w/canva-brown-rusty-mystery-novel-book-cover-hG1QhA7BiBU.jpg"
-                    alt="img"
-                    className=" h-[180px] w-[130px] rounded-sm mb-2"
-                  />
-                  <h4 className=" text-[14px]">Don’t Make Me think</h4>
-                  <p className=" text-[12px] pb-3">Steve Krug, 2000</p>
-                </div>
-                <div className=" bg-white w-[160px] px-4 pt-4 rounded-md">
-                  <img
-                    src="https://marketplace.canva.com/EAFaQMYuZbo/1/0/1003w/canva-brown-rusty-mystery-novel-book-cover-hG1QhA7BiBU.jpg"
-                    alt="img"
-                    className=" h-[180px] w-[130px] rounded-sm mb-2"
-                  />
-                  <h4 className=" text-[14px]">Don’t Make Me think</h4>
-                  <p className=" text-[12px] pb-3">Steve Krug, 2000</p>
-                </div>
-                <div className=" bg-white w-[160px] px-4 pt-4 rounded-md">
-                  <img
-                    src="https://marketplace.canva.com/EAFaQMYuZbo/1/0/1003w/canva-brown-rusty-mystery-novel-book-cover-hG1QhA7BiBU.jpg"
-                    alt="img"
-                    className=" h-[180px] w-[130px] rounded-sm mb-2"
-                  />
-                  <h4 className=" text-[14px]">Don’t Make Me think</h4>
-                  <p className=" text-[12px] pb-3">Steve Krug, 2000</p>
-                </div>
-                <div className=" bg-white w-[160px] px-4 pt-4 rounded-md">
-                  <img
-                    src="https://marketplace.canva.com/EAFaQMYuZbo/1/0/1003w/canva-brown-rusty-mystery-novel-book-cover-hG1QhA7BiBU.jpg"
-                    alt="img"
-                    className=" h-[180px] w-[130px] rounded-sm mb-2"
-                  />
-                  <h4 className=" text-[14px]">Don’t Make Me think</h4>
-                  <p className=" text-[12px] pb-3">Steve Krug, 2000</p>
-                </div>
-                <div className=" bg-white w-[160px] px-4 pt-4 rounded-md">
-                  <img
-                    src="https://marketplace.canva.com/EAFaQMYuZbo/1/0/1003w/canva-brown-rusty-mystery-novel-book-cover-hG1QhA7BiBU.jpg"
-                    alt="img"
-                    className=" h-[180px] w-[130px] rounded-sm mb-2"
-                  />
-                  <h4 className=" text-[14px]">Don’t Make Me think</h4>
-                  <p className=" text-[12px] pb-3">Steve Krug, 2000</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+    <div className="flex gap-6 flex-wrap pt-3">
+      <HomeCard
+        title={"Book"}
+        content={bookCount}
+        icon={<BiBook className="text-lg text-[#615fa0]" />}
+        iconBg={"bg-[#E5E4FF]"}
+      />
+      <HomeCard
+        title={"Genre"}
+        content={genreCount}
+        icon={<BiCategory className="text-lg text-[#a7812a]" />}
+        iconBg={"bg-[#FFF3D6]"}
+      />
+      <HomeCard
+        title={"Author"}
+        content={authorCount}
+        icon={<BsPerson className="text-lg text-[#31a068]" />}
+        iconBg={"bg-[#D9F7E8]"}
+      />
+      <HomeCard
+        title={"Total Rents"}
+        content={totalRentCount}
+        icon={<BiBookAdd className="text-lg text-[#b16546]" />}
+        iconBg={"bg-[#FFDED1]"}
+      />
     </div>
   );
 };

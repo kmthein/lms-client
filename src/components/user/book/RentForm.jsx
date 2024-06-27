@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form, Modal } from "antd";
+import { Form, Modal, message } from "antd";
 import Title from "antd/es/typography/Title";
 import { useSelector } from "react-redux";
 import { users } from "../../../features/user/userSlice";
@@ -11,6 +11,8 @@ const RentForm = ({ open, setOpen, book, isRent }) => {
 
   const { user } = useSelector(users);
 
+  const [messageApi, contextHolder] = message.useMessage();
+
   const onCreate = async (values) => {
     console.log("Book id: " + book.id);
     console.log("User id: " + user.id);
@@ -19,16 +21,29 @@ const RentForm = ({ open, setOpen, book, isRent }) => {
       const formData = new FormData();
       formData.append("bookId", book.id);
       formData.append("memberId", user.id);
+      let response;
       if (isRent) {
-        await userRentBook(formData);
+        response = await userRentBook(formData);
       } else {
-        await userReserveBook(formData);
+        response = await userReserveBook(formData);
+      }
+      const status = response.data.status;
+      if (status == "201") {
+        messageApi.open({
+          type: "success",
+          content: response.data.message,
+        });
+        setOpen(false);
+      } else {
+        messageApi.open({
+          type: "success",
+          content: response.data.message,
+        });
       }
     } catch (error) {
       console.error("Something went wrong:", error);
     } finally {
       setConfirmLoading(false);
-      setOpen(false);
     }
   };
 
@@ -45,6 +60,7 @@ const RentForm = ({ open, setOpen, book, isRent }) => {
       onCancel={handleCancel}
       width={400}
     >
+      {contextHolder}
       <Form
         form={form}
         name={"Book Rent"}
