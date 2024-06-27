@@ -70,11 +70,26 @@ const Bookcard = ({ book }) => {
               <div className="mt-2">
                 <Space size={[0, 8]} wrap>
                   {book.genres.length > 0 ? (
-                    book.genres.map((genre) => (
-                      <Tag key={genre.id} color="blue">
-                        {genre.genreName}
-                      </Tag>
-                    ))
+                    <>
+                      {book.genres.length > 3 ? (
+                        <>
+                          {book.genres.slice(0, 3).map((genre) => (
+                            <Tag key={genre.id} color="blue">
+                              {genre.genreName}
+                            </Tag>
+                          ))}
+                          <p>...</p>
+                        </>
+                      ) : (
+                        <>
+                          {book.genres.map((genre) => (
+                            <Tag key={genre.id} color="blue">
+                              {genre.genreName}
+                            </Tag>
+                          ))}
+                        </>
+                      )}
+                    </>
                   ) : (
                     <Tag color="gray">Unknown Genre</Tag>
                   )}

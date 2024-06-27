@@ -10,7 +10,7 @@ const Library = () => {
   useEffect(() => {
     getAllBooks().then((res) => setBooks(res.data));
   }, []);
-
+  console.log(books);
   return (
     <div className="w-[90%] mx-auto mt-8">
       <Row gutter={[20, 20]}>

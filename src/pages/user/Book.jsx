@@ -43,7 +43,7 @@ const Book = () => {
     }
     setSelectedGenre(value);
     const filterGenre = books.filter((book) =>
-      book.genres.some((g) => g.genreName === value)
+      book?.genres.some((g) => g.genreName === value)
     );
     setFilteredBooks(filterGenre);
   };
@@ -86,21 +86,22 @@ const Book = () => {
             <Radio value={"year"}>Year</Radio>
           </Space>
         </Radio.Group>
-        <Select
-          placeholder="Select Genre"
-          className="w-full mt-4"
-          onChange={handleGenreChange}
-          value={selectedGenre}
-        >
-          <Option value="">All Genre</Option>
-          {genres &&
-            genres.length > 0 &&
-            genres.map((genre) => (
-              <Option key={genre.genreId} value={genre.genreName}>
-                {genre.genreName}
-              </Option>
-            ))}
-        </Select>
+        <div>
+          <Select
+            placeholder="Select Genre"
+            className="w-[70%] mt-4"
+            onChange={handleGenreChange}
+            value={selectedGenre}
+          >
+            <Option value="">All Genre</Option>
+            {genres.length > 0 &&
+              genres.map((genre) => (
+                <Option key={genre.genreId} value={genre.genreName}>
+                  {genre.genreName}
+                </Option>
+              ))}
+          </Select>
+        </div>
       </div>
       <div className=" lg:w-[80%]">
         <h1 className="font-medium text-xl mb-4">All Books</h1>
