@@ -14,6 +14,7 @@ import BookDetails from "./pages/user/BookDetails";
 
 import History from "./pages/user/History";
 import Library from "./pages/user/Library";
+import Rent from "./pages/admin/Rent";
 
 function App() {
   const {
@@ -73,6 +74,10 @@ function App() {
               getColumnSearchProps={getColumnSearchProps}
             />
           ),
+        },
+        {
+          path: "rent",
+          element: <Rent />,
         },
         {
           path: "genre",
