@@ -1,21 +1,34 @@
 import React, { useState } from "react";
 import { Form, Modal } from "antd";
 import Title from "antd/es/typography/Title";
+import { useSelector } from "react-redux";
+import { users } from "../../../features/user/userSlice";
+import { userRentBook, userReserveBook } from "../../../api/book";
 
 const RentForm = ({ open, setOpen, book, isRent }) => {
   const [form] = Form.useForm();
   const [confirmLoading, setConfirmLoading] = useState(false);
 
+  const { user } = useSelector(users);
+
   const onCreate = async (values) => {
+    console.log("Book id: " + book.id);
+    console.log("User id: " + user.id);
     setConfirmLoading(true);
     try {
-      console.log(values);
-      setOpen(false);
-      form.resetFields();
+      const formData = new FormData();
+      formData.append("bookId", book.id);
+      formData.append("memberId", user.id);
+      if (isRent) {
+        await userRentBook(formData);
+      } else {
+        await userReserveBook(formData);
+      }
     } catch (error) {
-      console.error("Failed to register:", error);
+      console.error("Something went wrong:", error);
     } finally {
       setConfirmLoading(false);
+      setOpen(false);
     }
   };
 

@@ -16,7 +16,7 @@ const Cart = ({ onClose, open }) => {
     navigate(`/books/${id}`);
   };
   return (
-    <Drawer title="Cart Item" onClose={onClose} open={open} size="large">
+    <Drawer title="Saved Books" onClose={onClose} open={open} size="large">
       {cartItem.length > 0 &&
         cartItem.map((cart) => (
           <div key={cart.id}>
@@ -24,7 +24,10 @@ const Cart = ({ onClose, open }) => {
               align="center"
               justify="space-between"
               className="mb-3 cursor-pointer"
-              onClick={() => handleNavigate(cart.id)}
+              onClick={() => {
+                onClose();
+                handleNavigate(cart.id);
+              }}
             >
               <img
                 alt="book cover"

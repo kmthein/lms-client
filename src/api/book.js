@@ -43,3 +43,21 @@ export const getBookById = async (id) => {
     return error.response;
   }
 };
+
+export const userRentBook = async (payload) => {
+  try {
+    const response = await api.post(`api/rent/create`, payload);
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+export const userReserveBook = async (payload) => {
+  try {
+    const response = await api.post(`api/reservation/create`, payload);
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
