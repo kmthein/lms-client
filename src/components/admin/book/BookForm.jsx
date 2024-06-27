@@ -272,7 +272,6 @@ const BookForm = ({
             style={{
               width: 120,
             }}
-            onChange={handleChange}
             options={allAuthors}
           />
         </Form.Item>
@@ -293,7 +292,6 @@ const BookForm = ({
             style={{
               width: 120,
             }}
-            onChange={handleChange}
             options={allPublishers}
           />
         </Form.Item>
@@ -314,7 +312,6 @@ const BookForm = ({
             }}
             placeholder="select book genre"
             defaultValue={oldGenres}
-            onChange={handleChange}
             options={allGenres}
             optionRender={(option) => <Space>{option.data.desc}</Space>}
           />

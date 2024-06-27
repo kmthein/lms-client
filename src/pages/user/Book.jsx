@@ -32,7 +32,7 @@ const Book = () => {
     }
     setSelectedGenre(value);
     const filterGenre = books.filter((book) =>
-      book.genres.some((g) => g.genreName === value)
+      book?.genres.some((g) => g.genreName === value)
     );
     setFilteredBooks(filterGenre);
   };
@@ -83,11 +83,12 @@ const Book = () => {
           value={selectedGenre}
         >
           <Option value="">All Genre</Option>
-          {genres.map((genre) => (
-            <Option key={genre.genreId} value={genre.genreName}>
-              {genre.genreName}
-            </Option>
-          ))}
+          {genres.length > 0 &&
+            genres.map((genre) => (
+              <Option key={genre.genreId} value={genre.genreName}>
+                {genre.genreName}
+              </Option>
+            ))}
         </Select>
       </div>
       <div className="flex-1">
