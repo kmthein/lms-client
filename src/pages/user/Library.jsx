@@ -1,15 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { getAllBooks } from "../../api/book";
 import { Button, Row, Col, Card, Typography, Tag, Space } from "antd";
+import { useSelector } from "react-redux";
+import { uiState } from "../../features/ui/uiSlice";
 
 const { Title, Text, Paragraph } = Typography;
 
 const Library = () => {
   const [books, setBooks] = useState([]);
 
+  const { loading } = useSelector(uiState);
+
   useEffect(() => {
     getAllBooks().then((res) => setBooks(res.data));
   }, []);
+
   console.log(books);
   return (
     <div className="w-[90%] mx-auto mt-8">

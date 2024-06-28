@@ -46,7 +46,7 @@ const Bookcard = ({ book }) => {
             className="h-[280px] w-full object-cover rounded-t-md"
           />
         }
-        className="w-[250px] shadow-md rounded-md"
+        className="w-[250px] shadow-md rounded-md min-h-[470px]"
       >
         <Meta
           title={
