@@ -128,7 +128,7 @@ const Navbar = () => {
                 onClick={handleDrawer}
               />
               {cartItem.length > 0 && (
-                <span className=" bg-[#dc3232] text-white text-xs w-5 h-5 inline-flex items-center justify-center rounded-full absolute -right-3 -top-3">
+                <span className=" bg-[#dc3232] text-white text-xs w-5 h-5 inline-flex items-center justify-center rounded-full absolute -right-3 -top-2">
                   {cartItem.length}
                 </span>
               )}

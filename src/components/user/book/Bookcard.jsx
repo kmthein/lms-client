@@ -17,7 +17,7 @@ const Bookcard = ({ book }) => {
 
   const isFav =
     cartItem.filter((cart) => cart.id === book.id).length === 0 ? false : true;
-  console.log(cartItem);
+
   const handleFav = (e) => {
     e.stopPropagation();
     if (!isFav) {

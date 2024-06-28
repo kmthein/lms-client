@@ -1,9 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getBookById } from "../../api/book";
-import { Avatar, Input } from "antd";
+import { Avatar, Input, Skeleton } from "antd";
 import { BiSend, BiUser } from "react-icons/bi";
 import RentForm from "../../components/user/book/RentForm";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addToCart,
+  allCart,
+  removeFromCart,
+} from "../../features/cart/cartSlice";
+import { FaHeart } from "react-icons/fa";
+import { CiHeart } from "react-icons/ci";
+import { users } from "../../features/user/userSlice";
+import { endLoading, startLoading, uiState } from "../../features/ui/uiSlice";
 
 const BookDetails = () => {
   const { id } = useParams();
@@ -11,10 +21,12 @@ const BookDetails = () => {
   const [book, setBook] = useState(null);
 
   const getBookDetailHandler = async () => {
+    dispatch(startLoading());
     const response = await getBookById(id);
     if (response.status == 200) {
       setBook(response.data);
     }
+    dispatch(endLoading());
   };
 
   useEffect(() => {
@@ -25,9 +37,27 @@ const BookDetails = () => {
 
   const [isRent, setIsRent] = useState(true);
 
-  const showModal = () => {
-    setOpen(true);
+  const { user } = useSelector(users);
+
+  const { cartItem } = useSelector(allCart);
+
+  const { loading } = useSelector(uiState);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const isFav =
+    cartItem.filter((cart) => cart.id === book?.id).length === 0 ? false : true;
+
+  const handleFav = (e) => {
+    e.stopPropagation();
+    if (!isFav) {
+      dispatch(addToCart(book));
+    } else {
+      dispatch(removeFromCart(book.id));
+    }
   };
+
+  const [active, setActive] = useState(false);
 
   return (
     <div className="w-[80%] mx-auto">
@@ -43,78 +73,116 @@ const BookDetails = () => {
           />
         </div>
         <div className=" w-[70%]">
-          <h2 className=" text-2xl font-bold mb-2">{book?.title}</h2>
-          <div className="flex gap-2 mb-6">
-            <Avatar
-              icon={
-                book?.author.authorImg != null ? (
-                  <img src={book?.author.authorImg} />
-                ) : (
-                  <BiUser />
-                )
-              }
+          {loading ? (
+            <Skeleton
+              active
+              paragraph={{
+                rows: 8,
+              }}
             />
-            <span>{book?.author.name}</span>
-          </div>
-          <div className="flex gap-2 mb-6">
-            {book?.genres &&
-              book.genres.length > 0 &&
-              book.genres.map((genre) => (
-                <span className=" border text-sm p-2 rounded-md">
-                  {genre?.genreName}
-                </span>
-              ))}
-          </div>
-          <p className="mb-6">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga
-            corrupti totam dolorem, minus accusamus ipsum officia! Voluptate
-            laudantium sapiente cupiditate, suscipit assumenda quos praesentium
-            rerum? Modi non voluptate possimus vel laudantium, harum voluptatem
-            similique ducimus, aliquid tempore architecto dolorem hic molestiae
-            omnis distinctio eius sapiente molestias officiis asperiores! Amet
-            ipsa assumenda aperiam maxime, quibusdam numquam, illum distinctio
-            dignissimos ex ea veniam reiciendis culpa enim, expedita natus a
-            mollitia maiores! Accusantium harum, maiores quibusdam rem fugiat
-            non exercitationem vero eum error dolor quis delectus optio. Illo
-            exercitationem eius possimus expedita praesentium eos. Vero a
-            voluptatibus impedit vitae non. Quam, voluptatibus itaque.
-          </p>
-          <div className="mb-6">
-            <h5 className=" flex gap-4 mb-3">
-              <span className=" uppercase font-semibold w-40">Publisher</span>
-              <span>{book?.publisher.publisherName}</span>
-            </h5>
-            <h5 className=" flex gap-4 mb-3">
-              <span className=" uppercase font-semibold w-40">
-                Published Year
-              </span>
-              <span>{book?.publishYear}</span>
-            </h5>
-          </div>
-          <div>
-            {book?.stock > 0 ? (
-              <button
-                className=" bg-amber-500 hover:bg-[#ed9454] duration-150 p-2 rounded-sm text-sm"
-                onClick={() => {
-                  setOpen(true);
-                  setIsRent(true);
-                }}
-              >
-                Rent Now
-              </button>
-            ) : (
-              <button
-                className=" bg-amber-500 hover:bg-[#ed9454] p-2 rounded-sm text-sm"
-                onClick={() => {
-                  setOpen(true);
-                  setIsRent(false);
-                }}
-              >
-                Reserve
-              </button>
-            )}
-          </div>
-          <RentForm open={open} setOpen={setOpen} book={book} isRent={isRent} />
+          ) : (
+            <>
+              <div className=" flex justify-between items-center">
+                <h2 className=" text-2xl font-bold mb-2">{book?.title}</h2>
+                {isFav ? (
+                  <FaHeart
+                    size={30}
+                    onClick={handleFav}
+                    color="red"
+                    className="cursor-pointer"
+                  />
+                ) : (
+                  <CiHeart
+                    size={30}
+                    onClick={handleFav}
+                    color="red"
+                    className="cursor-pointer"
+                  />
+                )}
+              </div>
+              <div className="flex gap-2 mb-6">
+                <Avatar
+                  icon={
+                    book?.author.authorImg != null ? (
+                      <img
+                        src={import.meta.env.VITE_API + book?.author.authorImg}
+                      />
+                    ) : (
+                      <BiUser />
+                    )
+                  }
+                />
+                <span>{book?.author.name}</span>
+              </div>
+              <div className="flex gap-2 mb-6">
+                {book?.genres &&
+                  book.genres.length > 0 &&
+                  book.genres.map((genre) => (
+                    <span className=" border text-sm p-2 rounded-md">
+                      {genre?.genreName}
+                    </span>
+                  ))}
+              </div>
+              <p className="mb-6">
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga
+                corrupti totam dolorem, minus accusamus ipsum officia! Voluptate
+                laudantium sapiente cupiditate, suscipit assumenda quos
+                praesentium rerum? Modi non voluptate possimus vel laudantium,
+                harum voluptatem similique ducimus, aliquid tempore architecto
+                dolorem hic molestiae omnis distinctio eius sapiente molestias
+                officiis asperiores! Amet ipsa assumenda aperiam maxime,
+                quibusdam numquam, illum distinctio dignissimos ex ea veniam
+                reiciendis culpa enim, expedita natus a mollitia maiores!
+                Accusantium harum, maiores quibusdam rem fugiat non
+                exercitationem vero eum error dolor quis delectus optio. Illo
+                exercitationem eius possimus expedita praesentium eos. Vero a
+                voluptatibus impedit vitae non. Quam, voluptatibus itaque.
+              </p>
+              <div className="mb-6">
+                <h5 className=" flex gap-4 mb-3">
+                  <span className=" uppercase font-semibold w-40">
+                    Publisher
+                  </span>
+                  <span>{book?.publisher.publisherName}</span>
+                </h5>
+                <h5 className=" flex gap-4 mb-3">
+                  <span className=" uppercase font-semibold w-40">
+                    Published Year
+                  </span>
+                  <span>{book?.publishYear}</span>
+                </h5>
+              </div>
+              <div>
+                {book?.stock > 0 ? (
+                  <button
+                    className=" bg-amber-500 hover:bg-[#ed9454] duration-150 p-2 rounded-sm text-sm"
+                    onClick={() => {
+                      setOpen(true);
+                      setIsRent(true);
+                    }}
+                  >
+                    Rent Now
+                  </button>
+                ) : (
+                  <button
+                    className=" bg-amber-500 hover:bg-[#ed9454] p-2 rounded-sm text-sm"
+                    onClick={() => {
+                      setOpen(true);
+                      setIsRent(false);
+                    }}
+                  >
+                    Reserve
+                  </button>
+                )}
+              </div>
+              <RentForm
+                open={open}
+                setOpen={setOpen}
+                book={book}
+                isRent={isRent}
+              />
+            </>
+          )}
         </div>
       </div>
       <div>
@@ -125,8 +193,8 @@ const BookDetails = () => {
               <div>
                 <Avatar
                   icon={
-                    book?.author.authorImg != null ? (
-                      <img src={book?.author.authorImg} />
+                    user?.userImg != null ? (
+                      <img src={import.meta.env.VITE_API + user?.userImg} />
                     ) : (
                       <BiUser />
                     )

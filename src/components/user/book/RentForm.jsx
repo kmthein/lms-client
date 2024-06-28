@@ -1,19 +1,47 @@
 import React, { useState } from "react";
-import { Form, Modal } from "antd";
+import { Form, Modal, message } from "antd";
 import Title from "antd/es/typography/Title";
+import { useSelector } from "react-redux";
+import { users } from "../../../features/user/userSlice";
+import { userRentBook, userReserveBook } from "../../../api/book";
 
 const RentForm = ({ open, setOpen, book, isRent }) => {
   const [form] = Form.useForm();
   const [confirmLoading, setConfirmLoading] = useState(false);
 
+  const { user } = useSelector(users);
+
+  const [messageApi, contextHolder] = message.useMessage();
+
   const onCreate = async (values) => {
+    console.log("Book id: " + book.id);
+    console.log("User id: " + user.id);
     setConfirmLoading(true);
     try {
-      console.log(values);
-      setOpen(false);
-      form.resetFields();
+      const formData = new FormData();
+      formData.append("bookId", book.id);
+      formData.append("memberId", user.id);
+      let response;
+      if (isRent) {
+        response = await userRentBook(formData);
+      } else {
+        response = await userReserveBook(formData);
+      }
+      const status = response.data.status;
+      if (status == "201") {
+        messageApi.open({
+          type: "success",
+          content: response.data.message,
+        });
+        setOpen(false);
+      } else {
+        messageApi.open({
+          type: "success",
+          content: response.data.message,
+        });
+      }
     } catch (error) {
-      console.error("Failed to register:", error);
+      console.error("Something went wrong:", error);
     } finally {
       setConfirmLoading(false);
     }
@@ -32,6 +60,7 @@ const RentForm = ({ open, setOpen, book, isRent }) => {
       onCancel={handleCancel}
       width={400}
     >
+      {contextHolder}
       <Form
         form={form}
         name={"Book Rent"}

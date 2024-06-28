@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { getAllBooks } from "../../api/book";
 import { getAllGenres } from "../../api/genre";
-import { Pagination, Radio, Select, Space } from "antd";
+import { Pagination, Radio, Select, Space, Spin } from "antd";
 import Bookcard from "../../components/user/book/Bookcard";
+import { useDispatch, useSelector } from "react-redux";
+import { endLoading, startLoading, uiState } from "../../features/ui/uiSlice";
 const { Option } = Select;
 
 const Book = () => {
@@ -12,13 +14,22 @@ const Book = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedGenre, setSelectedGenre] = useState("");
   const [sortOption, setSortOption] = useState("");
-  const pageSize = 10;
+  const pageSize = 8;
+
+  const dispatch = useDispatch();
+
+  const { loading } = useSelector(uiState);
+
   useEffect(() => {
+    dispatch(startLoading());
     getAllBooks().then((res) => {
       setBooks(res.data);
       setFilteredBooks(res.data);
     });
     getAllGenres().then((res) => setGenres(res.data));
+    setTimeout(() => {
+      dispatch(endLoading());
+    }, [500]);
   }, []);
 
   const handlePageChange = (page) => {
@@ -94,20 +105,30 @@ const Book = () => {
       </div>
       <div className=" lg:w-[80%]">
         <h1 className="font-medium text-xl mb-4">All Books</h1>
-        <div className="flex flex-wrap gap-6">
-          {currentBooks.map((book) => (
-            <Bookcard book={book} key={book.id} />
-          ))}
-        </div>
-        <div className="flex justify-center mt-8">
-          <Pagination
-            current={currentPage}
-            total={filteredBooks.length}
-            pageSize={pageSize}
-            onChange={handlePageChange}
-            showSizeChanger={false}
-          />
-        </div>
+        {!loading ? (
+          <>
+            <div className="flex flex-wrap gap-6">
+              {currentBooks &&
+                currentBooks.length > 0 &&
+                currentBooks.map((book) => (
+                  <Bookcard book={book} key={book.id} />
+                ))}
+            </div>
+            <div className="flex justify-center mt-8">
+              <Pagination
+                current={currentPage}
+                total={filteredBooks.length}
+                pageSize={pageSize}
+                onChange={handlePageChange}
+                showSizeChanger={false}
+              />
+            </div>
+          </>
+        ) : (
+          <div className=" min-h-[60vh] flex justify-center items-center">
+            <Spin />
+          </div>
+        )}
       </div>
     </div>
   );
