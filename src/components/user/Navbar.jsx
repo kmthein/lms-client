@@ -25,7 +25,7 @@ const Navbar = () => {
     } else {
       setIsLogin(true);
     }
-  }, [user])
+  }, [user]);
 
   const { cartItem } = useSelector(allCart);
 
@@ -41,13 +41,19 @@ const Navbar = () => {
 
   const items = [
     {
-      label: "My Profile",
+      label: <NavLink to="/profile">My Profile</NavLink>,
       key: "1",
     },
     {
-      label: <span onClick={() => {
-        dispatch(logout());
-      }}>Logout</span>,
+      label: (
+        <span
+          onClick={() => {
+            dispatch(logout());
+          }}
+        >
+          Logout
+        </span>
+      ),
       key: "2",
     },
   ];
@@ -68,16 +74,29 @@ const Navbar = () => {
         /> */}
         <div className="flex gap-20 items-center uppercase font-medium">
           <ul className="flex gap-8">
-            <NavLink to="/" className={({ isActive }) => isActive && " font-bold"} end>
+            <NavLink
+              to="/"
+              className={({ isActive }) => isActive && " font-bold"}
+              end
+            >
               <li>Home</li>
             </NavLink>
-            <NavLink to="/books" className={({ isActive }) => isActive && " font-bold"}>
+            <NavLink
+              to="/books"
+              className={({ isActive }) => isActive && " font-bold"}
+            >
               <li>Books</li>
             </NavLink>
-            <NavLink to="/library" className={({ isActive }) => isActive && " font-bold"}>
+            <NavLink
+              to="/library"
+              className={({ isActive }) => isActive && " font-bold"}
+            >
               <li>My Library</li>
             </NavLink>
-            <NavLink to="/history" className={({ isActive }) => isActive && " font-bold"}>
+            <NavLink
+              to="/history"
+              className={({ isActive }) => isActive && " font-bold"}
+            >
               <li>History</li>
             </NavLink>
           </ul>

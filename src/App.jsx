@@ -15,6 +15,7 @@ import BookDetails from "./pages/user/BookDetails";
 import History from "./pages/user/History";
 import Library from "./pages/user/Library";
 import Rent from "./pages/admin/Rent";
+import Profile from "./pages/user/Profile";
 
 function App() {
   const {
@@ -35,6 +36,12 @@ function App() {
           index: true,
           element: <UserHome />,
         },
+
+        {
+          path: "profile",
+          element: <Profile />,
+        },
+
         {
           path: "/books",
           element: <UserBook />,
