@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Input, Select, Space, Dropdown, Avatar } from "antd";
 import { BiDownArrow, BiDownArrowAlt, BiUser } from "react-icons/bi";
 import { CgArrowBottomLeft, CgPinBottom } from "react-icons/cg";
 import { LuArrowDownNarrowWide } from "react-icons/lu";
 import { BsCart, BsFillCartFill } from "react-icons/bs";
+import { useDispatch } from "react-redux";
+import { logout } from "../../features/user/userSlice";
 
 const { Search } = Input;
 const Navbar = () => {
@@ -27,16 +29,25 @@ const Navbar = () => {
   ];
 
   const handleMenuClick = (e) => {
-    message.info("Click on menu item.");
     console.log("click", e);
   };
+
+  const dispatch = useDispatch();
 
   const onSearch = (value, _e, info) => console.log(info?.source, value);
 
   const items = [
     {
-      label: "Logout",
       key: "1",
+      label: (
+        <h6
+          onClick={() => {
+            dispatch(logout());
+          }}
+        >
+          Logout
+        </h6>
+      ),
     },
   ];
 
