@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Table, Space, Tag } from "antd";
+import { Table, Tag } from "antd";
 import { getAllBookRent } from "../../api/bookrent";
-import { formatDate } from "../../utils";
 
 const History = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
     getAllBookRent().then((res) => {
-      // res.data.map((d) => (d.rentDate = formatDate(d.rentDate)));
       setData(res.data);
     });
   }, []);

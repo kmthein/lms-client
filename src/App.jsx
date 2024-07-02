@@ -73,47 +73,37 @@ function App() {
     },
     {
       path: "/admin",
-      element: <Admin />,
+      element: (
+        <AdminProvider>
+          <Admin />
+        </AdminProvider>
+      ),
       children: [
         {
           index: true,
-          element: (
-            <AdminProvider>
-              <Home />
-            </AdminProvider>
-          ),
+          element: <Home />,
         },
         {
           path: "books",
           element: (
-            <AdminProvider>
-              <Books
-                searchText={searchText}
-                setSearchText={setSearchText}
-                searchedColumn={searchedColumn}
-                setSearchedColumn={setSearchedColumn}
-                handleSearch={handleSearch}
-                handleReset={handleReset}
-                getColumnSearchProps={getColumnSearchProps}
-              />
-            </AdminProvider>
+            <Books
+              searchText={searchText}
+              setSearchText={setSearchText}
+              searchedColumn={searchedColumn}
+              setSearchedColumn={setSearchedColumn}
+              handleSearch={handleSearch}
+              handleReset={handleReset}
+              getColumnSearchProps={getColumnSearchProps}
+            />
           ),
         },
         {
           path: "rent",
-          element: (
-            <AdminProvider>
-              <Rent />
-            </AdminProvider>
-          ),
+          element: <Rent />,
         },
         {
           path: "reservation",
-          element: (
-            <AdminProvider>
-              <Reservation />
-            </AdminProvider>
-          ),
+          element: <Reservation />,
         },
         {
           path: "genre",
@@ -132,33 +122,29 @@ function App() {
         {
           path: "author",
           element: (
-            <AdminProvider>
-              <Author
-                searchText={searchText}
-                setSearchText={setSearchText}
-                searchedColumn={searchedColumn}
-                setSearchedColumn={setSearchedColumn}
-                handleSearch={handleSearch}
-                handleReset={handleReset}
-                getColumnSearchProps={getColumnSearchProps}
-              />
-            </AdminProvider>
+            <Author
+              searchText={searchText}
+              setSearchText={setSearchText}
+              searchedColumn={searchedColumn}
+              setSearchedColumn={setSearchedColumn}
+              handleSearch={handleSearch}
+              handleReset={handleReset}
+              getColumnSearchProps={getColumnSearchProps}
+            />
           ),
         },
         {
           path: "publisher",
           element: (
-            <AdminProvider>
-              <Publisher
-                searchText={searchText}
-                setSearchText={setSearchText}
-                searchedColumn={searchedColumn}
-                setSearchedColumn={setSearchedColumn}
-                handleSearch={handleSearch}
-                handleReset={handleReset}
-                getColumnSearchProps={getColumnSearchProps}
-              />
-            </AdminProvider>
+            <Publisher
+              searchText={searchText}
+              setSearchText={setSearchText}
+              searchedColumn={searchedColumn}
+              setSearchedColumn={setSearchedColumn}
+              handleSearch={handleSearch}
+              handleReset={handleReset}
+              getColumnSearchProps={getColumnSearchProps}
+            />
           ),
         },
       ],

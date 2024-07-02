@@ -1,29 +1,33 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { users } from "../features/user/userSlice";
-import { useNavigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 
-const AdminProvider = ({ children }) => {
+const AdminProvider = () => {
   const { user, token } = useSelector(users);
 
-  const navigate = useNavigate();
-
-  //   console.log(user);
-
-  useEffect(() => {
-    switch (true) {
-      case !token:
-        navigate("/admin-login");
-        break;
-      case token && user.role === "MEMBER":
-        navigate("/");
-        break;
-      default:
-        break;
-    }
-  }, [token, user, navigate]);
-
-  return <>{children}</>;
+  let content;
+  if (token && user.role === "LIBRARIAN") {
+    content = <Outlet />;
+  } else if (!token) {
+    content = !token && <Navigate to="/admin-login" />;
+  } else if (token && user.role === "MEMBER") {
+    content = <Navigate to="/" />;
+  } else {
+    content = <Navigate to="/" />;
+  }
+  return (
+    <>
+      {/* {!token ? (
+        <Navigate to="/admin-login" />
+      ) : token && user.role === "MEMBER" ? (
+        <Navigate to="/" />
+      ) : (
+        <Outlet />
+      )} */}
+      {content}
+    </>
+  );
 };
 
 export default AdminProvider;

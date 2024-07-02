@@ -11,7 +11,6 @@ import { Button, Dropdown, Space, Input, Avatar } from "antd";
 import { BiUser } from "react-icons/bi";
 
 const Navbar = () => {
-  const { Search } = Input;
   const [open, setOpen] = useState(false);
   const [isDrawer, setIsDrawer] = useState(false);
 
@@ -46,13 +45,14 @@ const Navbar = () => {
     },
     {
       label: (
-        <span
+        <NavLink
+          to="/"
           onClick={() => {
             dispatch(logout());
           }}
         >
           Logout
-        </span>
+        </NavLink>
       ),
       key: "2",
     },
