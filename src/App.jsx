@@ -16,6 +16,11 @@ import History from "./pages/user/History";
 import Library from "./pages/user/Library";
 import Rent from "./pages/admin/Rent";
 import Reservation from "./pages/admin/Reservation";
+import { useSelector } from "react-redux";
+import { users } from "./features/user/userSlice";
+import AdminProvider from "./providers/AdminProvider";
+import Register from "./pages/admin/Register";
+import Login from "./pages/admin/Login";
 
 function App() {
   const {
@@ -27,6 +32,7 @@ function App() {
     handleReset,
     getColumnSearchProps,
   } = useSearch();
+
   const router = createBrowserRouter([
     {
       path: "/",
@@ -60,29 +66,43 @@ function App() {
       children: [
         {
           index: true,
-          element: <Home />,
+          element: (
+            <AdminProvider>
+              <Home />
+            </AdminProvider>
+          ),
         },
         {
           path: "books",
           element: (
-            <Books
-              searchText={searchText}
-              setSearchText={setSearchText}
-              searchedColumn={searchedColumn}
-              setSearchedColumn={setSearchedColumn}
-              handleSearch={handleSearch}
-              handleReset={handleReset}
-              getColumnSearchProps={getColumnSearchProps}
-            />
+            <AdminProvider>
+              <Books
+                searchText={searchText}
+                setSearchText={setSearchText}
+                searchedColumn={searchedColumn}
+                setSearchedColumn={setSearchedColumn}
+                handleSearch={handleSearch}
+                handleReset={handleReset}
+                getColumnSearchProps={getColumnSearchProps}
+              />
+            </AdminProvider>
           ),
         },
         {
           path: "rent",
-          element: <Rent />,
+          element: (
+            <AdminProvider>
+              <Rent />
+            </AdminProvider>
+          ),
         },
         {
           path: "reservation",
-          element: <Reservation />,
+          element: (
+            <AdminProvider>
+              <Reservation />
+            </AdminProvider>
+          ),
         },
         {
           path: "genre",
@@ -101,32 +121,44 @@ function App() {
         {
           path: "author",
           element: (
-            <Author
-              searchText={searchText}
-              setSearchText={setSearchText}
-              searchedColumn={searchedColumn}
-              setSearchedColumn={setSearchedColumn}
-              handleSearch={handleSearch}
-              handleReset={handleReset}
-              getColumnSearchProps={getColumnSearchProps}
-            />
+            <AdminProvider>
+              <Author
+                searchText={searchText}
+                setSearchText={setSearchText}
+                searchedColumn={searchedColumn}
+                setSearchedColumn={setSearchedColumn}
+                handleSearch={handleSearch}
+                handleReset={handleReset}
+                getColumnSearchProps={getColumnSearchProps}
+              />
+            </AdminProvider>
           ),
         },
         {
           path: "publisher",
           element: (
-            <Publisher
-              searchText={searchText}
-              setSearchText={setSearchText}
-              searchedColumn={searchedColumn}
-              setSearchedColumn={setSearchedColumn}
-              handleSearch={handleSearch}
-              handleReset={handleReset}
-              getColumnSearchProps={getColumnSearchProps}
-            />
+            <AdminProvider>
+              <Publisher
+                searchText={searchText}
+                setSearchText={setSearchText}
+                searchedColumn={searchedColumn}
+                setSearchedColumn={setSearchedColumn}
+                handleSearch={handleSearch}
+                handleReset={handleReset}
+                getColumnSearchProps={getColumnSearchProps}
+              />
+            </AdminProvider>
           ),
         },
       ],
+    },
+    {
+      path: "/admin-register",
+      element: <Register />,
+    },
+    {
+      path: "/admin-login",
+      element: <Login />,
     },
   ]);
 
