@@ -14,7 +14,7 @@ const Book = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedGenre, setSelectedGenre] = useState("");
   const [sortOption, setSortOption] = useState("");
-  const pageSize = 8;
+  const pageSize = 10;
 
   const dispatch = useDispatch();
 

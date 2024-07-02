@@ -11,7 +11,6 @@ import { Button, Dropdown, Space, Input, Avatar } from "antd";
 import { BiUser } from "react-icons/bi";
 
 const Navbar = () => {
-  const { Search } = Input;
   const [open, setOpen] = useState(false);
   const [isDrawer, setIsDrawer] = useState(false);
 
@@ -41,18 +40,19 @@ const Navbar = () => {
 
   const items = [
     {
-      label: "My Profile",
+      label: <NavLink to="/profile">My Profile</NavLink>,
       key: "1",
     },
     {
       label: (
-        <span
+        <NavLink
+          to="/"
           onClick={() => {
             dispatch(logout());
           }}
         >
           Logout
-        </span>
+        </NavLink>
       ),
       key: "2",
     },
@@ -76,26 +76,26 @@ const Navbar = () => {
           <ul className="flex gap-8">
             <NavLink
               to="/"
-              className={({ isActive }) => isActive && " font-bold"}
+              className={({ isActive }) => (isActive ? "font-bold" : "")}
               end
             >
               <li>Home</li>
             </NavLink>
             <NavLink
               to="/books"
-              className={({ isActive }) => isActive && " font-bold"}
+              className={({ isActive }) => (isActive ? "font-bold" : "")}
             >
               <li>Books</li>
             </NavLink>
             <NavLink
               to="/library"
-              className={({ isActive }) => isActive && " font-bold"}
+              className={({ isActive }) => (isActive ? "font-bold" : "")}
             >
               <li>My Library</li>
             </NavLink>
             <NavLink
               to="/history"
-              className={({ isActive }) => isActive && " font-bold"}
+              className={({ isActive }) => (isActive ? "font-bold" : "")}
             >
               <li>History</li>
             </NavLink>
