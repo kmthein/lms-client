@@ -16,8 +16,8 @@ import { BiLock, BiUser } from "react-icons/bi";
 import { BsPersonFill } from "react-icons/bs";
 import { FaKey } from "react-icons/fa";
 import { MdEmail, MdOutlineEmail } from "react-icons/md";
-import { Link, useNavigate } from "react-router-dom";
-import { loginUser } from "../../../api/auth";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import { loginUser, registerUser } from "../../../api/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { login, users } from "../../../features/user/userSlice";
 import Title from "antd/es/skeleton/Title";
@@ -25,20 +25,15 @@ import { FaPlus, FaTrashAlt } from "react-icons/fa";
 
 const AuthForm = ({ isLogin }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   const [previewImg, setPreviewImg] = useState([]);
   const [images, setImages] = useState([]);
   const [imgCount, setImgCount] = useState(0);
 
+  const [form] = Form.useForm();
+
   const { user, token } = useSelector(users);
 
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (token) {
-      navigate("/admin");
-    }
-  }, [token]);
 
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -77,6 +72,32 @@ const AuthForm = ({ isLogin }) => {
           content: response.data.message,
         });
       }
+    } else {
+      for (const key in values) {
+        formData.append(key, values[key]);
+      }
+      formData.delete("image");
+      formData.append("role", "LIBRARIAN");
+      const response = await registerUser(formData);
+      console.log(response);
+      if (response.data == "Email already existed.") {
+        messageApi.open({
+          type: "error",
+          content: response.data,
+        });
+      } else if (response.data == "User created successfully") {
+        form.resetFields();
+        messageApi.open({
+          type: "success",
+          content: response.data,
+        });
+        navigate("/admin-login");
+      } else {
+        messageApi.open({
+          type: "error",
+          content: response.data,
+        });
+      }
     }
   };
 
@@ -93,7 +114,7 @@ const AuthForm = ({ isLogin }) => {
     setPreviewImg((prev) => [previewImagesArray]);
   };
 
-  return (
+  return !token ? (
     <>
       {contextHolder}
       {isLogin ? (
@@ -315,6 +336,8 @@ const AuthForm = ({ isLogin }) => {
         </div>
       )}
     </>
+  ) : (
+    <Navigate to="/admin" />
   );
 };
 
