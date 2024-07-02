@@ -76,26 +76,26 @@ const Navbar = () => {
           <ul className="flex gap-8">
             <NavLink
               to="/"
-              className={({ isActive }) => isActive && " font-bold"}
+              className={({ isActive }) => (isActive ? "font-bold" : "")}
               end
             >
               <li>Home</li>
             </NavLink>
             <NavLink
               to="/books"
-              className={({ isActive }) => isActive && " font-bold"}
+              className={({ isActive }) => (isActive ? "font-bold" : "")}
             >
               <li>Books</li>
             </NavLink>
             <NavLink
               to="/library"
-              className={({ isActive }) => isActive && " font-bold"}
+              className={({ isActive }) => (isActive ? "font-bold" : "")}
             >
               <li>My Library</li>
             </NavLink>
             <NavLink
               to="/history"
-              className={({ isActive }) => isActive && " font-bold"}
+              className={({ isActive }) => (isActive ? "font-bold" : "")}
             >
               <li>History</li>
             </NavLink>

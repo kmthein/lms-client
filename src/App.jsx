@@ -17,6 +17,7 @@ import Library from "./pages/user/Library";
 import Rent from "./pages/admin/Rent";
 import Profile from "./pages/user/Profile";
 import Reservation from "./pages/admin/Reservation";
+import EditProfile from "./pages/user/EditProfile";
 
 function App() {
   const {
@@ -42,7 +43,10 @@ function App() {
           path: "profile",
           element: <Profile />,
         },
-
+        {
+          path: "profile/edit",
+          element: <EditProfile />,
+        },
         {
           path: "/books",
           element: <UserBook />,
