@@ -2,13 +2,14 @@ import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { users } from "../features/user/userSlice";
 import { Navigate, Outlet } from "react-router-dom";
+import Admin from "../layouts/Admin";
 
 const AdminProvider = () => {
   const { user, token } = useSelector(users);
 
   let content;
   if (token && user.role === "LIBRARIAN") {
-    content = <Outlet />;
+    content = <Admin />;
   } else if (!token) {
     content = !token && <Navigate to="/admin-login" />;
   } else if (token && user.role === "MEMBER") {
@@ -16,18 +17,7 @@ const AdminProvider = () => {
   } else {
     content = <Navigate to="/" />;
   }
-  return (
-    <>
-      {/* {!token ? (
-        <Navigate to="/admin-login" />
-      ) : token && user.role === "MEMBER" ? (
-        <Navigate to="/" />
-      ) : (
-        <Outlet />
-      )} */}
-      {content}
-    </>
-  );
+  return <>{content}</>;
 };
 
 export default AdminProvider;
