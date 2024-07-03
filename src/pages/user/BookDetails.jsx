@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getBookById } from "../../api/book";
-import { Avatar, Input, Skeleton } from "antd";
+import {
+  createNewBookReview,
+  getAllBookReview,
+  getBookById,
+} from "../../api/book";
+import { Avatar, Input, Skeleton, message, Dropdown, Space } from "antd";
 import { BiSend, BiUser } from "react-icons/bi";
 import RentForm from "../../components/user/book/RentForm";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,11 +18,13 @@ import { FaHeart } from "react-icons/fa";
 import { CiHeart } from "react-icons/ci";
 import { users } from "../../features/user/userSlice";
 import { endLoading, startLoading, uiState } from "../../features/ui/uiSlice";
+import { IoChevronDownOutline } from "react-icons/io5";
 
 const BookDetails = () => {
   const { id } = useParams();
 
   const [book, setBook] = useState(null);
+  const [bookReview, setBookReview] = useState([]);
 
   const getBookDetailHandler = async () => {
     dispatch(startLoading());
@@ -29,9 +35,22 @@ const BookDetails = () => {
     dispatch(endLoading());
   };
 
+  const getBookReviewHandler = async () => {
+    dispatch(startLoading());
+    const response = await getAllBookReview({ id: book?.id });
+    setBookReview(response.data);
+    dispatch(endLoading());
+  };
+
+  console.log(bookReview);
+
   useEffect(() => {
     getBookDetailHandler();
   }, []);
+
+  useEffect(() => {
+    getBookReviewHandler();
+  }, [book]);
 
   const [open, setOpen] = useState(false);
 
@@ -57,10 +76,54 @@ const BookDetails = () => {
     }
   };
 
+  const [input, setInput] = useState("");
+
+  console.log(user?.id);
+  console.log(book?.id);
+
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const reviewSubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("userId", user.id);
+    formData.append("bookId", book.id);
+    formData.append("description", input);
+    const response = await createNewBookReview(formData);
+    console.log(response);
+    if (response.data.status == "201") {
+      setInput("");
+      messageApi.open({
+        type: "success",
+        content: response.data.message,
+      });
+      getBookReviewHandler();
+    }
+  };
+
   const [active, setActive] = useState(false);
+
+  const items = [
+    {
+      label: <a href="https://www.antgroup.com">1st menu item</a>,
+      key: "0",
+    },
+    {
+      label: <a href="https://www.aliyun.com">2nd menu item</a>,
+      key: "1",
+    },
+    {
+      type: "divider",
+    },
+    {
+      label: "3rd menu item",
+      key: "3",
+    },
+  ];
 
   return (
     <div className="w-[80%] mx-auto">
+      {contextHolder}
       <div className="flex my-10 gap-14">
         <div className=" w-[350px] h-[500px] book_cover rounded-lg">
           <img
@@ -188,13 +251,59 @@ const BookDetails = () => {
       <div>
         <div className="mb-6">
           <h2 className="title mb-4 text-lg">Write Review</h2>
-          <form className="flex w-full">
-            <div className=" flex gap-3 w-full">
+          <div className="flex w-full">
+            {user ? (
+              <div className=" flex gap-3 w-full">
+                <div>
+                  <Avatar
+                    icon={
+                      user?.userImg != null ? (
+                        <img src={import.meta.env.VITE_API + user?.userImg} />
+                      ) : (
+                        <BiUser />
+                      )
+                    }
+                  />
+                </div>
+                <div className="w-full">
+                  <h5 className="font-medium mb-2">{user?.username}</h5>
+                  <div>
+                    <form className="flex" onSubmit={reviewSubmit}>
+                      <input
+                        type="text"
+                        placeholder="write a review"
+                        name="review"
+                        value={input}
+                        onChange={(e) => setInput(e.target.value)}
+                        className="border py-2 px-2 rounded-tl-md rounded-bl-md w-full text-sm outline-none"
+                      />
+                      <button
+                        type="submit"
+                        className=" bg-[#1b3e62] w-10 inline-flex rounded-tr-md rounded-br-md justify-center items-center"
+                      >
+                        <BiSend className=" text-white text-xl hover:-rotate-45 duration-200" />
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <p>Log in to write a review...</p>
+            )}
+          </div>
+        </div>
+        <h2 className="title mb-4 text-lg">Reviews</h2>
+        {bookReview &&
+          bookReview.length > 0 &&
+          bookReview.map((review) => (
+            <div className=" flex gap-3 mb-6">
               <div>
                 <Avatar
                   icon={
-                    user?.userImg != null ? (
-                      <img src={import.meta.env.VITE_API + user?.userImg} />
+                    review?.user?.userImg != null ? (
+                      <img
+                        src={import.meta.env.VITE_API + review?.user?.userImg}
+                      />
                     ) : (
                       <BiUser />
                     )
@@ -202,119 +311,28 @@ const BookDetails = () => {
                 />
               </div>
               <div className="w-full">
-                <h5 className="font-medium mb-2">User 1</h5>
-                <div className="flex">
-                  <input
-                    type="text"
-                    placeholder="write a review"
-                    name="review"
-                    className="border py-2 px-2 rounded-tl-md rounded-bl-md w-full text-sm outline-none"
-                  />
-                  <button className=" bg-[#1b3e62] w-10 inline-flex rounded-tr-md rounded-br-md justify-center items-center">
-                    <BiSend className=" text-white text-xl hover:-rotate-45 duration-200" />
-                  </button>
+                <div className="flex justify-between">
+                  <h5 className="font-medium mb-2">{review?.user.username}</h5>
+                  {user?.id == review?.user.id && (
+                    <Dropdown
+                      menu={{
+                        items,
+                      }}
+                      trigger={["click"]}
+                    >
+                      <a
+                        onClick={(e) => e.preventDefault()}
+                        className="cursor-pointer"
+                      >
+                        <IoChevronDownOutline />
+                      </a>
+                    </Dropdown>
+                  )}
                 </div>
+                <span className=" text-sm">{review?.description}</span>
               </div>
             </div>
-          </form>
-        </div>
-        <h2 className="title mb-4 text-lg">Reviews</h2>
-        <div className=" flex gap-3 mb-6">
-          <div>
-            <Avatar
-              icon={
-                book?.author.authorImg != null ? (
-                  <img src={book?.author.authorImg} />
-                ) : (
-                  <BiUser />
-                )
-              }
-            />
-          </div>
-          <div>
-            <h5 className="font-medium mb-2">User 1</h5>
-            <span className=" text-sm">
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Totam
-              quasi aspernatur temporibus dicta eaque repudiandae. Labore
-              cupiditate laboriosam culpa eveniet optio itaque quasi magni sequi
-              ab! Ea illum corrupti harum consectetur blanditiis ratione
-              adipisci neque laboriosam voluptatem maiores cupiditate earum qui
-              commodi enim ex voluptas, tempore magnam ullam modi eius.
-            </span>
-          </div>
-        </div>
-        <div className=" flex gap-3 mb-6">
-          <div>
-            <Avatar
-              icon={
-                book?.author.authorImg != null ? (
-                  <img src={book?.author.authorImg} />
-                ) : (
-                  <BiUser />
-                )
-              }
-            />
-          </div>
-          <div>
-            <h5 className="font-medium mb-2">User 1</h5>
-            <span className=" text-sm">
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Totam
-              quasi aspernatur temporibus dicta eaque repudiandae. Labore
-              cupiditate laboriosam culpa eveniet optio itaque quasi magni sequi
-              ab! Ea illum corrupti harum consectetur blanditiis ratione
-              adipisci neque laboriosam voluptatem maiores cupiditate earum qui
-              commodi enim ex voluptas, tempore magnam ullam modi eius.
-            </span>
-          </div>
-        </div>
-        <div className=" flex gap-3 mb-6">
-          <div>
-            <Avatar
-              icon={
-                book?.author.authorImg != null ? (
-                  <img src={book?.author.authorImg} />
-                ) : (
-                  <BiUser />
-                )
-              }
-            />
-          </div>
-          <div>
-            <h5 className="font-medium mb-2">User 1</h5>
-            <span className=" text-sm">
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Totam
-              quasi aspernatur temporibus dicta eaque repudiandae. Labore
-              cupiditate laboriosam culpa eveniet optio itaque quasi magni sequi
-              ab! Ea illum corrupti harum consectetur blanditiis ratione
-              adipisci neque laboriosam voluptatem maiores cupiditate earum qui
-              commodi enim ex voluptas, tempore magnam ullam modi eius.
-            </span>
-          </div>
-        </div>
-        <div className=" flex gap-3 mb-6">
-          <div>
-            <Avatar
-              icon={
-                book?.author.authorImg != null ? (
-                  <img src={book?.author.authorImg} />
-                ) : (
-                  <BiUser />
-                )
-              }
-            />
-          </div>
-          <div>
-            <h5 className="font-medium mb-2">User 1</h5>
-            <span className=" text-sm">
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Totam
-              quasi aspernatur temporibus dicta eaque repudiandae. Labore
-              cupiditate laboriosam culpa eveniet optio itaque quasi magni sequi
-              ab! Ea illum corrupti harum consectetur blanditiis ratione
-              adipisci neque laboriosam voluptatem maiores cupiditate earum qui
-              commodi enim ex voluptas, tempore magnam ullam modi eius.
-            </span>
-          </div>
-        </div>
+          ))}
       </div>
     </div>
   );
